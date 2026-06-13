@@ -24,6 +24,12 @@ const importanceByTone = {
   noise: "가볍게 확인",
 };
 
+const rowAccentClasses = {
+  strong: "border-l-[#d97706]",
+  watch: "border-l-[#3b82f6]",
+  noise: "border-l-[#c8b9a4]",
+};
+
 export function IssueBriefList({ links }: IssueBriefListProps) {
   if (links.length === 0) {
     return (
@@ -78,7 +84,7 @@ export function IssueBriefList({ links }: IssueBriefListProps) {
           return (
             <article
               key={link.id}
-              className="grid gap-2 py-4 transition hover:bg-white/55 sm:grid-cols-[minmax(0,1fr)_8.5rem] sm:gap-4"
+              className={`grid gap-2 border-l-4 py-4 pl-3 transition hover:bg-white/55 sm:grid-cols-[minmax(0,1fr)_8.5rem] sm:gap-4 ${rowAccentClasses[tone]}`}
             >
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">

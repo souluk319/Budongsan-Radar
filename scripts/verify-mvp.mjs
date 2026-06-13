@@ -74,6 +74,14 @@ function assertH1(body, expected, label) {
   }
 }
 
+function assertSingleH1(body, label) {
+  const h1Matches = [...body.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/g)];
+
+  if (h1Matches.length !== 1) {
+    throw new Error(`${label} should have exactly one h1`);
+  }
+}
+
 function assertIncludesAny(body, expectedList, label) {
   if (!expectedList.some((expected) => body.includes(expected))) {
     throw new Error(
@@ -147,17 +155,17 @@ async function main() {
 
     const home = await fetchPage(baseUrl, "/");
     assertTitle(home, "집집", "home");
-    assertH1(home, "대출보다 상환액을 먼저 볼 때", "home");
+    assertSingleH1(home, "home");
     assertIncludes(home, "집집", "home");
-    assertIncludes(home, "오늘 집값 뉴스 한 줄", "home");
-    assertIncludes(home, "오늘의 집픽", "home");
+    assertIncludes(home, "오늘의 판세", "home");
+    assertIncludes(home, "실제 수집", "home");
+    assertIncludes(home, "먼저 볼 것", "home");
     assertIncludes(home, "내 상황별 영향", "home");
     assertIncludes(home, "오늘 볼 이슈", "home");
     assertIncludes(home, "지역 흐름", "home");
     assertIncludes(home, "꼭 보기", "home");
     assertIncludes(home, "세입자가 오늘 볼 것", "home");
     assertIncludes(home, "전세 안전 체크", "home");
-    assertIncludes(home, "샘플 데이터", "home");
     assertExcludes(home, publicForbiddenTerms, "home");
 
     const filtered = await fetchPage(
@@ -165,7 +173,7 @@ async function main() {
       "/?category=%EC%A0%95%EC%B1%85&region=%EC%A0%84%EA%B5%AD",
     );
     assertIncludes(filtered, "filter-chip-active", "filtered home");
-    assertIncludes(filtered, "대출 완화 기대", "filtered home");
+    assertIncludes(filtered, "관심 기준", "filtered home");
 
     const emptyFiltered = await fetchPage(
       baseUrl,

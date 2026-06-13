@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "verify:mvp": "npm run lint && npm run build && node scripts/verify-mvp.mjs",
-    "db:seed": "tsx scripts/seed-supabase.mjs"
+    "db:seed": "tsx scripts/seed-supabase.mjs",
+    "data:live": "node scripts/ingest-live-data.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",
