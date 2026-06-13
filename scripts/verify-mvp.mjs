@@ -157,12 +157,19 @@ async function main() {
     assertTitle(home, "집집", "home");
     assertSingleH1(home, "home");
     assertIncludes(home, "집집", "home");
+    assertIncludes(home, "오늘의 시장지도", "home");
+    assertIncludes(home, "뉴스가 어디를 흔드는지 먼저 봅니다", "home");
     assertIncludes(home, "오늘의 판세", "home");
     assertIncludes(home, "실제 수집", "home");
-    assertIncludes(home, "먼저 볼 것", "home");
+    assertIncludes(home, "지금 뜨는 이슈", "home");
+    assertIncludes(home, "강한 신호", "home");
+    assertIncludes(home, "전체 이슈", "home");
+    assertIncludes(home, "중요도", "home");
+    assertIncludes(home, "오늘의 집픽", "home");
     assertIncludes(home, "내 상황별 영향", "home");
-    assertIncludes(home, "오늘 볼 이슈", "home");
     assertIncludes(home, "지역 흐름", "home");
+    assertIncludes(home, "이슈 압력", "home");
+    assertIncludes(home, "오늘 볼 이슈", "home");
     assertIncludes(home, "꼭 보기", "home");
     assertIncludes(home, "세입자가 오늘 볼 것", "home");
     assertIncludes(home, "전세 안전 체크", "home");
@@ -180,7 +187,7 @@ async function main() {
       "/?category=%EA%B2%BD%EB%A7%A4&region=%EC%84%9C%EC%9A%B8",
     );
     assertIncludes(emptyFiltered, "아직 맞는 이슈가 없습니다", "empty filtered home");
-    assertIncludes(emptyFiltered, "전체 브리프 보기", "empty filtered home");
+    assertIncludes(emptyFiltered, "전체 보기", "empty filtered home");
     assertExcludes(emptyFiltered, publicForbiddenTerms, "empty filtered home");
 
     const briefing = await fetchPage(baseUrl, "/briefing");

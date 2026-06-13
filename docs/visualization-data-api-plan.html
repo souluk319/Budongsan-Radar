@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>집집 시각화 와우포인트 + API 장보기</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f5ef;
+        --paper: #fffdf8;
+        --ink: #171514;
+        --muted: #6e675d;
+        --line: #e2dbcf;
+        --soft: #f0ebe2;
+        --accent: #f26b2f;
+        --accent-soft: #fff0e7;
+        --blue: #2f6df6;
+        --green: #1f8a55;
+        --red: #bf3b2f;
+        --shadow: 0 18px 44px rgba(31, 25, 18, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+          "Noto Sans KR", "Segoe UI", sans-serif;
+        line-height: 1.65;
+        letter-spacing: 0;
+      }
+
+      a {
+        color: inherit;
+        text-decoration-color: rgba(242, 107, 47, 0.55);
+        text-underline-offset: 3px;
+      }
+
+      code {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background: #fff8ef;
+        padding: 0.12rem 0.36rem;
+        color: #5d2814;
+        font-family:
+          ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", monospace;
+        font-size: 0.92em;
+      }
+
+      pre {
+        overflow-x: auto;
+        border: 1px solid #2e2a25;
+        border-radius: 12px;
+        background: #181614;
+        color: #fff8ef;
+        padding: 1rem;
+        line-height: 1.55;
+      }
+
+      pre code {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        padding: 0;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 40px 0 72px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.9fr);
+        gap: 24px;
+        align-items: stretch;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .hero-copy {
+        padding: 30px;
+      }
+
+      .eyebrow {
+        margin: 0 0 10px;
+        color: var(--accent);
+        font-size: 0.84rem;
+        font-weight: 900;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.25;
+        letter-spacing: 0;
+      }
+
+      h1 {
+        max-width: 760px;
+        font-size: clamp(2rem, 4.6vw, 4.3rem);
+        word-break: keep-all;
+      }
+
+      h2 {
+        font-size: clamp(1.35rem, 2.3vw, 2rem);
+      }
+
+      h3 {
+        font-size: 1.08rem;
+      }
+
+      p {
+        word-break: keep-all;
+      }
+
+      .lead {
+        max-width: 780px;
+        margin: 16px 0 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.7vw, 1.18rem);
+      }
+
+      .visual-demo {
+        display: grid;
+        align-content: center;
+        gap: 14px;
+        border-left: 1px solid var(--line);
+        background:
+          linear-gradient(180deg, rgba(255, 240, 231, 0.72), transparent 46%),
+          #fffaf2;
+        padding: 24px;
+      }
+
+      .map-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+
+      .tile {
+        min-height: 72px;
+        border: 1px solid rgba(23, 21, 20, 0.08);
+        border-radius: 12px;
+        padding: 10px;
+        background: #fff;
+      }
+
+      .tile strong {
+        display: block;
+        font-size: 0.9rem;
+      }
+
+      .tile span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 0.76rem;
+      }
+
+      .heat-1 {
+        background: #ffefe4;
+      }
+
+      .heat-2 {
+        background: #fff7d9;
+      }
+
+      .heat-3 {
+        background: #ecf8ee;
+      }
+
+      .heat-4 {
+        background: #eef3ff;
+      }
+
+      .hero-note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin: 22px 0 0;
+      }
+
+      .summary-card,
+      .section,
+      .callout {
+        border: 1px solid var(--line);
+        background: var(--paper);
+      }
+
+      .summary-card {
+        border-radius: 16px;
+        padding: 18px;
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 1rem;
+      }
+
+      .summary-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .section {
+        margin-top: 34px;
+        border-radius: 20px;
+        padding: 26px;
+      }
+
+      .section-head {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+
+      .section-head p {
+        margin: 8px 0 0;
+        color: var(--muted);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        min-height: 28px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: #8c3516;
+        padding: 0 10px;
+        font-size: 0.8rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
+        gap: 18px;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .idea-card {
+        border-top: 1px solid var(--line);
+        padding: 18px 0 0;
+      }
+
+      .idea-card:first-child,
+      .idea-card:nth-child(2) {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .idea-card p,
+      .idea-card ul {
+        color: var(--muted);
+      }
+
+      ul,
+      ol {
+        margin: 10px 0 0;
+        padding-left: 1.25rem;
+      }
+
+      li + li {
+        margin-top: 0.38rem;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 12px;
+        font-size: 0.95rem;
+      }
+
+      th,
+      td {
+        border-bottom: 1px solid var(--line);
+        padding: 12px 10px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 0.82rem;
+      }
+
+      .callout {
+        border-radius: 16px;
+        padding: 18px;
+        background: #fffaf2;
+      }
+
+      .callout strong {
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .source-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px 18px;
+      }
+
+      @media (max-width: 820px) {
+        .page {
+          width: min(100% - 24px, 720px);
+          padding-top: 24px;
+        }
+
+        .hero,
+        .two-col,
+        .summary-grid,
+        .cards,
+        .source-list {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-copy,
+        .visual-demo,
+        .section {
+          padding: 20px;
+        }
+
+        .visual-demo {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+
+        .map-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .idea-card:nth-child(2) {
+          border-top: 1px solid var(--line);
+          padding-top: 18px;
+        }
+
+        .section-head {
+          display: block;
+        }
+
+        .badge {
+          margin-top: 12px;
+        }
+
+        table {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">집집 방향 수정</p>
+          <h1>와우포인트는 큰 글씨가 아니라, 부동산 상황이 보이는 그림이다</h1>
+          <p class="lead">
+            홈의 주인공은 문장이 아니라 시각화다. 집집은 뉴스 제목을 크게
+            보여주는 앱이 아니라, 내 동네·내 전세·내가 보는 단지의 흐름을
+            한눈에 보여주는 부동산 브리핑으로 가야 한다.
+          </p>
+        </div>
+        <aside class="visual-demo" aria-label="시장지도 예시">
+          <div class="map-grid">
+            <div class="tile heat-1"><strong>서울</strong><span>청약·대출 신호 강함</span></div>
+            <div class="tile heat-2"><strong>경기</strong><span>전세 흐름 관찰</span></div>
+            <div class="tile heat-3"><strong>인천</strong><span>거래 표본 부족</span></div>
+            <div class="tile heat-4"><strong>지방</strong><span>지역별 차이 큼</span></div>
+          </div>
+          <p class="hero-note">
+            이건 장식용 박스가 아니라, 실제 REB/실거래/뉴스 근거가 붙을
+            첫 화면의 방향이다.
+          </p>
+        </aside>
+      </section>
+
+      <section class="summary-grid" aria-label="핵심 판단">
+        <article class="summary-card">
+          <strong>틀린 해결</strong>
+          <p>헤드라인 확대, 숫자 과시, 장식용 게이지. 이건 데모 앱 냄새가 난다.</p>
+        </article>
+        <article class="summary-card">
+          <strong>맞는 해결</strong>
+          <p>지도, 흐름, 비교, 분포, 타임라인으로 판단을 바로 보이게 만든다.</p>
+        </article>
+        <article class="summary-card">
+          <strong>필요한 재료</strong>
+          <p>주소/좌표, 단지/관리비, 건축물대장, 실거래/전월세, 지역 통계.</p>
+        </article>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>추가로 받으면 좋은 키</h2>
+            <p>지금 당장 필요한 건 전부가 아니다. 시각화 임팩트를 만드는 순서대로 받으면 된다.</p>
+          </div>
+          <span class="badge">우선순위 확정</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>우선순위</th>
+              <th>env</th>
+              <th>왜 필요한가</th>
+              <th>성욱이 할 일</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>최우선</td>
+              <td><code>KAKAO_REST_API_KEY</code></td>
+              <td>주소/장소 검색 UX, 지역·단지 검색, 사용자 입력 보정</td>
+              <td>카카오 개발자센터 REST API 키 발급</td>
+            </tr>
+            <tr>
+              <td>최우선</td>
+              <td><code>JUSO_CONFIRM_KEY</code></td>
+              <td>공식 도로명주소 검색/정규화, 법정동/지번 연결의 기준</td>
+              <td>주소정보 API 승인키 발급</td>
+            </tr>
+            <tr>
+              <td>최우선</td>
+              <td><code>VWORLD_API_KEY</code></td>
+              <td>공공 공간정보, 좌표/지도 레이어, 지역 시각화 기반</td>
+              <td>브이월드 API 키 발급</td>
+            </tr>
+            <tr>
+              <td>다음</td>
+              <td><code>SEOUL_OPEN_DATA_API_KEY</code></td>
+              <td>서울 지하철, 상권, 생활인구, 학교 등 생활권 시각화</td>
+              <td>서울 열린데이터광장 인증키 발급</td>
+            </tr>
+            <tr>
+              <td>다음</td>
+              <td><code>GG_DATA_API_KEY</code></td>
+              <td>경기 지역 생활권/교통/인구 보강</td>
+              <td>경기데이터드림 인증키 발급</td>
+            </tr>
+            <tr>
+              <td>선택</td>
+              <td><code>HOUSTAT_API_KEY</code></td>
+              <td>주택금융통계, 대출/보증/금리 맥락 보강</td>
+              <td>주택금융통계 Open API 키 확인</td>
+            </tr>
+            <tr>
+              <td>선택</td>
+              <td><code>HUG_DATA_API_KEY</code></td>
+              <td>전세보증 통계, 전세 안전 체크 보강</td>
+              <td>HUG open API 또는 파일데이터 접근 확인</td>
+            </tr>
+            <tr>
+              <td>선택</td>
+              <td><code>FSS_FINLIFE_API_KEY</code></td>
+              <td>금융상품/대출 비교 시나리오. 초기에는 필수 아님</td>
+              <td>금융상품 비교 API 가능 여부 확인</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>실서비스 첫 화면 관찰</h2>
+            <p>
+              성욱 피드백 이후 실제 부동산/주거 데이터 서비스의 첫 화면 문법을 다시
+              기준으로 잡았다. 결론은 단순하다. 인기 서비스는 설명부터 하지 않는다.
+              지도, 가격 말풍선, 랭킹, 차트, 필터가 먼저 보인다.
+            </p>
+          </div>
+          <span class="badge">반영 기준</span>
+        </div>
+        <div class="cards">
+          <article class="idea-card">
+            <h3>호갱노노</h3>
+            <p>
+              지도 위에 아파트 가격 말풍선과 필터가 바로 보인다. 집집도 텍스트
+              브리핑보다 지도형 시장 보드가 먼저 나와야 한다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>리치고</h3>
+            <p>
+              지도 위 가격 마커, 좌측 랭킹, 상단 필터, 우측 기능 탭이 동시에 보인다.
+              집집은 이슈 TOP, 지역 말풍선, 이슈 압력을 한 장면에 배치한다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>아실/부동산지인</h3>
+            <p>
+              실거래, 전세, 시장강도, 입주물량을 지도와 차트로 보여준다. 집집 Part2는
+              전세 안전 그림과 단지 스파크라인으로 가야 한다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>Redfin/Zillow/Realtor</h3>
+            <p>
+              시장 열기, 수요/공급, 지역 랭킹을 데이터 허브처럼 보여준다. 집집도
+              뉴스 링크가 아니라 오늘 어디가 흔들리는지를 보여줘야 한다.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>기존 키로 먼저 해야 할 활용신청</h2>
+            <p>
+              <code>DATA_GO_KR_SERVICE_KEY</code>는 이미 있다. 새 env보다
+              공공데이터포털에서 필요한 API를 활용신청하는 게 더 중요하다.
+            </p>
+          </div>
+          <span class="badge">새 키보다 중요</span>
+        </div>
+        <div class="two-col">
+          <div class="callout">
+            <strong>단지/건물 시각화</strong>
+            <ul>
+              <li>국토교통부 건축HUB 건축물대장정보 서비스</li>
+              <li>국토교통부 공동주택 단지 목록제공 서비스</li>
+              <li>국토교통부 공동주택 기본 정보제공 서비스</li>
+              <li>국토교통부 공동주택관리비 개별사용료 정보제공서비스</li>
+              <li>국토교통부 공동주택관리비 장기수선충당금 정보서비스</li>
+              <li>국토교통부 회계감사보고서 정보</li>
+            </ul>
+          </div>
+          <div class="callout">
+            <strong>전세/매매/청약 시각화</strong>
+            <ul>
+              <li>아파트 매매 실거래가 자료</li>
+              <li>아파트 전월세 실거래가 자료</li>
+              <li>오피스텔 매매/전월세 실거래가 자료</li>
+              <li>연립다세대 매매/전월세 실거래가 자료</li>
+              <li>단독다가구 매매/전월세 실거래가 자료</li>
+              <li>청약홈 분양정보</li>
+              <li>청약 경쟁률/특별공급 신청현황</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>집집의 시각화 와우포인트</h2>
+            <p>이 순서로 만들면 텍스트 뉴스앱이 아니라 부동산 데이터 제품처럼 보인다.</p>
+          </div>
+          <span class="badge">제품 중심</span>
+        </div>
+        <div class="cards">
+          <article class="idea-card">
+            <h3>1. 오늘의 시장지도</h3>
+            <p>
+              서울/경기/인천/지방 흐름을 타일 히트맵으로 보여준다. 뉴스 제목을 읽기
+              전에 어디가 뜨겁고 어디가 식는지 먼저 보이게 한다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>2. 내 동네 온도 스트립</h3>
+            <p>
+              지역을 누르면 거래, 전세, 청약, 뉴스 신호가 4칸 스트립으로 보인다.
+              전국 뉴스가 내 생활권 이야기로 바뀐다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>3. 전세 안전 그림</h3>
+            <p>
+              내 보증금 위치를 최근 전세/매매 범위 위에 점으로 찍는다. 점수보다
+              훨씬 직관적이다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>4. 단지 비교 스파크라인</h3>
+            <p>
+              실거래, 전세, 관리비, 연식, 세대수를 작은 선과 띠로 비교한다.
+              단지 페이지가 재방문 도구가 된다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>5. 청약 경쟁률 그림</h3>
+            <p>
+              분양가, 경쟁률, 지역 쏠림을 한 장에 보여준다. 무주택자에게 바로
+              꽂히는 화면이다.
+            </p>
+          </article>
+          <article class="idea-card">
+            <h3>6. 월 부담 시뮬레이터</h3>
+            <p>
+              금리 뉴스가 월 상환액 변화로 보인다. 투자 조언이 아니라 생활비
+              감각으로 보여준다.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>내가 할 수 있는 것 / 성욱이 할 것</h2>
+            <p>일을 나누면 이렇게 간다.</p>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <h3>Michael이 할 것</h3>
+            <ul>
+              <li>추가 env를 <code>.env.example</code>에 반영</li>
+              <li>원천별 adapter 분리</li>
+              <li>주소/지역/단지 정규화 테이블 설계</li>
+              <li>홈을 시장지도 중심으로 재설계</li>
+              <li>전세 안전 체크를 시각화형 도구로 확장</li>
+              <li>단지 브리프에 관리비/실거래 스파크라인 추가</li>
+              <li>샘플/실제/불확실성 표시를 UI에 고정</li>
+            </ul>
+          </div>
+          <div>
+            <h3>성욱이 할 것</h3>
+            <ol>
+              <li>카카오 REST API 키 발급</li>
+              <li>도로명주소 주소정보 API 승인키 발급</li>
+              <li>브이월드 API 키 발급</li>
+              <li>공공데이터포털에서 단지/관리비/건축물대장 API 활용신청</li>
+              <li>여유 있으면 서울/경기/HUG/주택금융통계 키 확인</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>지금 쫓지 말 것</h2>
+            <p>멋있어 보여도 지금 붙이면 시간만 먹는 영역이다.</p>
+          </div>
+        </div>
+        <ul>
+          <li>KB부동산 시세 API: 공개 API로 바로 붙이기 어렵다. 제휴/약관 확인 전에는 후순위.</li>
+          <li>등기부/경매 전체 자동화: 접근/약관/비용/법적 리스크가 크다.</li>
+          <li>커뮤니티 글 대량 크롤링: 노이즈와 약관 리스크가 크다.</li>
+          <li>언론사 본문 전문 수집: 저작권 리스크가 크다. 링크/메타/자체 해석만.</li>
+        </ul>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <h2>참고한 공식/제품 레퍼런스</h2>
+            <p>시각화와 데이터 수집 기준으로 확인한 출처다.</p>
+          </div>
+        </div>
+        <div class="source-list">
+          <a href="https://developers.kakao.com/docs/en/local/dev-guide">Kakao Local API</a>
+          <a href="https://business.juso.go.kr/jst/jstAddressApiList">도로명주소 주소정보 API</a>
+          <a href="https://www.vworld.kr/dev/v4dv_geocoderguide2_s001.do">VWorld Geocoder API</a>
+          <a href="https://www.data.go.kr/data/15134735/openapi.do">건축HUB 건축물대장정보 서비스</a>
+          <a href="https://www.data.go.kr/data/15126469/openapi.do">아파트 매매 실거래가 자료</a>
+          <a href="https://www.data.go.kr/data/15126474/openapi.do">아파트 전월세 실거래가 자료</a>
+          <a href="https://www.data.go.kr/data/15057332/openapi.do">공동주택 단지 목록제공 서비스</a>
+          <a href="https://www.data.go.kr/data/15058453/openapi.do">공동주택 기본 정보제공 서비스</a>
+          <a href="https://data.seoul.go.kr/together/guide/useGuide.do">서울 열린데이터광장 Open API</a>
+          <a href="https://www.redfin.com/news/data-center/">Redfin Data Center</a>
+          <a href="https://www.zillow.com/research/market-heat-index-34054/">Zillow Market Heat Index</a>
+          <a href="https://www.realtor.com/research/topics/hottest-markets/">Realtor.com Hottest Markets</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
