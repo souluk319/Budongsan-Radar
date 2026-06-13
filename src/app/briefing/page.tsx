@@ -1,9 +1,9 @@
 import { DailyBriefingList } from "@/components/daily-briefing-list";
 import { SiteHeader } from "@/components/site-header";
-import { getDailyPicks } from "@/lib/radar-data";
+import { getBriefingData } from "@/lib/radar-repository";
 
-export default function BriefingPage() {
-  const dailyPicks = getDailyPicks(10);
+export default async function BriefingPage() {
+  const { links, mode, reason } = await getBriefingData(10);
 
   return (
     <>
@@ -18,14 +18,15 @@ export default function BriefingPage() {
               오늘의 부동산 이슈 10개
             </h2>
             <p className="mt-3 max-w-3xl text-base leading-7 text-zinc-600">
-              레이더 점수 기준으로 정렬한 샘플 브리핑입니다. 각 항목은 실제
-              뉴스가 아니라 MVP 구조 검증용 데모 콘텐츠입니다.
+              레이더 점수 기준으로 정렬한 브리핑입니다. 현재 데이터 모드:
+              {" "}
+              {mode === "supabase" ? "Supabase DB" : `seed fallback (${reason})`}.
             </p>
           </div>
         </section>
 
         <section className="mx-auto grid w-full max-w-5xl gap-4 px-4 py-8 sm:px-6 lg:px-8">
-          <DailyBriefingList links={dailyPicks} showSummary />
+          <DailyBriefingList links={links} showSummary />
         </section>
       </main>
     </>

@@ -4,12 +4,10 @@ import { FilterBar } from "@/components/filter-bar";
 import { LinkCard } from "@/components/link-card";
 import { SiteHeader } from "@/components/site-header";
 import {
-  getDailyPicks,
-  getFilteredLinks,
-  getTrendingLinks,
   isCategory,
   isRegion,
 } from "@/lib/radar-data";
+import { getHomeData } from "@/lib/radar-repository";
 
 type HomeProps = {
   searchParams?: Promise<{
@@ -24,9 +22,14 @@ export default async function Home({ searchParams }: HomeProps) {
     ? params.category
     : undefined;
   const selectedRegion = isRegion(params?.region) ? params.region : undefined;
-  const filteredLinks = getFilteredLinks(selectedCategory, selectedRegion);
-  const dailyPicks = getDailyPicks(4);
-  const trendingLinks = getTrendingLinks(5);
+  const {
+    mode,
+    reason,
+    filteredLinks,
+    dailyPicks,
+    trendingLinks,
+    totalDailyPicks,
+  } = await getHomeData(selectedCategory, selectedRegion);
 
   return (
     <>
@@ -37,10 +40,10 @@ export default async function Home({ searchParams }: HomeProps) {
             <div className="min-w-0">
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="rounded-md border border-rose-200 bg-rose-50 px-2 py-1 text-xs font-semibold text-rose-800">
-                  MVP 데모
+                  {mode === "supabase" ? "DB 연결" : "Seed fallback"}
                 </span>
                 <span className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-semibold text-zinc-600">
-                  DB/OpenAI 미연동
+                  {mode === "supabase" ? "실제 저장 지원" : reason ?? "샘플 데이터"}
                 </span>
               </div>
               <h2 className="max-w-3xl text-3xl font-bold leading-tight text-zinc-950 sm:text-4xl">
@@ -48,8 +51,9 @@ export default async function Home({ searchParams }: HomeProps) {
               </h2>
               <p className="mt-3 max-w-3xl text-base leading-7 text-zinc-600">
                 매물 플랫폼이 아니라 뉴스, 리포트, 정책, 커뮤니티 이슈를
-                사용자 상황별로 해석하는 정보 보드입니다. 현재 화면의 모든
-                이슈는 제품 형태 검증용 샘플 데이터입니다.
+                사용자 상황별로 해석하는 정보 보드입니다. Supabase가 설정되면
+                실제 링크/저장/추천 흐름을 사용하고, 미설정 상태에서는 seed
+                샘플로 제품 형태를 확인합니다.
               </p>
             </div>
 
@@ -63,19 +67,20 @@ export default async function Home({ searchParams }: HomeProps) {
                 </div>
                 <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
                   <p className="font-mono text-xl font-bold text-zinc-950">
-                    {getDailyPicks().length}
+                    {totalDailyPicks}
                   </p>
                   <p className="mt-1 text-xs text-zinc-500">오늘 픽</p>
                 </div>
                 <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
                   <p className="font-mono text-xl font-bold text-zinc-950">
-                    0
+                    {mode === "supabase" ? "on" : "off"}
                   </p>
                   <p className="mt-1 text-xs text-zinc-500">실제 저장</p>
                 </div>
               </div>
               <p className="text-sm leading-6 text-zinc-600">
-                추천/저장/제출은 UI 상태만 확인하는 mock 동작입니다.
+                추천/저장/제출은 로그인과 Supabase env가 있을 때 실제 DB에
+                기록됩니다.
               </p>
             </aside>
           </div>
@@ -126,7 +131,7 @@ export default async function Home({ searchParams }: HomeProps) {
               ) : (
                 <div className="rounded-md border border-zinc-200 bg-white p-6">
                   <h3 className="text-base font-semibold text-zinc-950">
-                    조건에 맞는 샘플 이슈가 없습니다
+                    조건에 맞는 이슈가 없습니다
                   </h3>
                   <p className="mt-2 text-sm leading-6 text-zinc-600">
                     카테고리나 지역 필터를 줄이면 더 많은 이슈를 볼 수

@@ -13,8 +13,8 @@ export default function SubmitPage() {
               부동산 이슈 링크 제출
             </h2>
             <p className="mt-3 max-w-3xl text-base leading-7 text-zinc-600">
-              MVP에서는 입력 폼과 제출 상태만 검증합니다. 실제 저장, 관리자
-              승인, AI 요약 생성은 다음 루프에서 붙입니다.
+              로그인한 사용자가 링크를 제출하면 Supabase에 pending 상태로
+              저장됩니다. 관리자가 승인하고 필요하면 OpenAI 요약을 생성합니다.
             </p>
           </div>
         </section>

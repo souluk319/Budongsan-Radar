@@ -92,7 +92,7 @@ async function main() {
     const home = await fetchPage(baseUrl, "/");
     assertIncludes(home, "오늘 부동산판에서 봐야 할 이슈", "home");
     assertIncludes(home, "샘플 데이터", "home");
-    assertIncludes(home, "DB/OpenAI 미연동", "home");
+    assertIncludes(home, "Seed fallback", "home");
 
     const filtered = await fetchPage(
       baseUrl,
@@ -103,7 +103,7 @@ async function main() {
 
     const briefing = await fetchPage(baseUrl, "/briefing");
     assertIncludes(briefing, "오늘의 부동산 이슈 10개", "briefing");
-    assertIncludes(briefing, "MVP 구조 검증용 데모 콘텐츠", "briefing");
+    assertIncludes(briefing, "seed fallback", "briefing");
 
     const detail = await fetchPage(baseUrl, "/links/policy-loan-rule-watch");
     assertIncludes(detail, "3줄 요약", "detail");
@@ -112,8 +112,14 @@ async function main() {
     assertIncludes(detail, "실제 기사, 투자 조언", "detail");
 
     const submit = await fetchPage(baseUrl, "/submit");
-    assertIncludes(submit, "링크 제출 데모", "submit");
-    assertIncludes(submit, "실제 저장", "submit");
+    assertIncludes(submit, "링크 제출", "submit");
+    assertIncludes(submit, "pending 상태", "submit");
+
+    const login = await fetchPage(baseUrl, "/login");
+    assertIncludes(login, "Supabase Auth", "login");
+
+    const admin = await fetchPage(baseUrl, "/admin");
+    assertIncludes(admin, "링크 승인 큐", "admin");
 
     const missing = await fetchPage(
       baseUrl,

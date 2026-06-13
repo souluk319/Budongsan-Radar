@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ActionButtons } from "@/components/action-buttons";
 import { ImpactPanel } from "@/components/impact-panel";
 import { LinkCard } from "@/components/link-card";
-import { MockActionButtons } from "@/components/mock-action-buttons";
 import { SampleBadge } from "@/components/sample-badge";
 import { ScoreBadge } from "@/components/score-badge";
 import { SiteHeader } from "@/components/site-header";
 import { Tag } from "@/components/tag";
 import {
   formatKoreanDate,
-  getLinkById,
-  getRelatedLinks,
-  radarLinks,
 } from "@/lib/radar-data";
+import { getRadarLinkDetail, radarLinks } from "@/lib/radar-repository";
 
 type LinkDetailProps = {
   params: Promise<{
@@ -31,29 +29,29 @@ export async function generateMetadata({
   params,
 }: LinkDetailProps): Promise<Metadata> {
   const { id } = await params;
-  const link = getLinkById(id);
+  const detail = await getRadarLinkDetail(id);
 
-  if (!link) {
+  if (!detail) {
     return {
       title: "이슈 없음 | 부동산 레이더",
     };
   }
 
   return {
-    title: `${link.title} | 부동산 레이더`,
-    description: link.impactLine,
+    title: `${detail.link.title} | 부동산 레이더`,
+    description: detail.link.impactLine,
   };
 }
 
 export default async function LinkDetailPage({ params }: LinkDetailProps) {
   const { id } = await params;
-  const link = getLinkById(id);
+  const detail = await getRadarLinkDetail(id);
 
-  if (!link) {
+  if (!detail) {
     notFound();
   }
 
-  const relatedLinks = getRelatedLinks(link);
+  const { link, relatedLinks, mode, reason } = detail;
 
   return (
     <>
@@ -63,7 +61,7 @@ export default async function LinkDetailPage({ params }: LinkDetailProps) {
           <div className="mx-auto grid w-full max-w-5xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[1fr_auto] lg:px-8">
             <div className="min-w-0">
               <div className="mb-4 flex flex-wrap items-center gap-2">
-                <SampleBadge />
+                {link.isSample ? <SampleBadge /> : null}
                 <Tag tone="category">{link.category}</Tag>
                 {link.regions.map((region) => (
                   <Tag key={region} tone="region">
@@ -91,8 +89,9 @@ export default async function LinkDetailPage({ params }: LinkDetailProps) {
 
         <section className="mx-auto grid w-full max-w-5xl gap-8 px-4 py-8 sm:px-6 lg:px-8">
           <div className="rounded-md border border-rose-200 bg-rose-50 p-4 text-sm leading-6 text-rose-900">
-            이 페이지는 샘플 데이터로 만든 AI 스타일 요약입니다. 실제 기사,
-            투자 조언, 매수/매도 추천이 아닙니다.
+            {mode === "supabase"
+              ? "이 요약은 참고 정보입니다. 투자 조언, 매수/매도 추천이 아닙니다."
+              : `이 페이지는 seed fallback 데이터입니다. ${reason ?? "Supabase 설정 전 샘플입니다."} 실제 기사, 투자 조언, 매수/매도 추천이 아닙니다.`}
           </div>
 
           <section className="grid gap-3">
@@ -103,7 +102,7 @@ export default async function LinkDetailPage({ params }: LinkDetailProps) {
               rel="noreferrer"
               className="break-all rounded-md border border-zinc-200 bg-white p-4 text-sm font-semibold text-zinc-800 underline-offset-4 hover:underline"
             >
-              샘플 원문 URL: {link.sourceUrl}
+              {link.isSample ? "샘플 원문 URL" : "원문 URL"}: {link.sourceUrl}
             </a>
           </section>
 
@@ -150,7 +149,7 @@ export default async function LinkDetailPage({ params }: LinkDetailProps) {
           <section className="grid gap-3">
             <h3 className="text-xl font-bold text-zinc-950">추천/저장</h3>
             <div className="rounded-md border border-zinc-200 bg-white p-4">
-              <MockActionButtons />
+              <ActionButtons linkId={link.id} />
             </div>
           </section>
 

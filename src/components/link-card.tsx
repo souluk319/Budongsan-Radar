@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatKoreanDate, type RadarLink } from "@/lib/radar-data";
-import { MockActionButtons } from "@/components/mock-action-buttons";
+import { ActionButtons } from "@/components/action-buttons";
 import { SampleBadge } from "@/components/sample-badge";
 import { ScoreBadge } from "@/components/score-badge";
 import { Tag } from "@/components/tag";
@@ -20,7 +20,7 @@ export function LinkCard({ link, rank }: LinkCardProps) {
               #{rank}
             </span>
           ) : null}
-          <SampleBadge />
+          {link.isSample ? <SampleBadge /> : null}
           <Tag tone="category">{link.category}</Tag>
           {link.regions.map((region) => (
             <Tag key={region} tone="region">
@@ -48,7 +48,7 @@ export function LinkCard({ link, rank }: LinkCardProps) {
         </div>
 
         <div className="mt-4">
-          <MockActionButtons compact />
+          <ActionButtons linkId={link.id} compact />
         </div>
       </div>
 

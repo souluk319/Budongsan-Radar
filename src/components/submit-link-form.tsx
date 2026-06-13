@@ -3,17 +3,56 @@
 import { useState } from "react";
 import { categories, regions } from "@/lib/radar-data";
 
-type SubmitState = "idle" | "submitted";
+type SubmitState = {
+  message: string;
+  tone: "idle" | "success" | "error";
+};
 
 export function SubmitLinkForm() {
-  const [state, setState] = useState<SubmitState>("idle");
+  const [state, setState] = useState<SubmitState>({
+    message: "",
+    tone: "idle",
+  });
+  const [pending, setPending] = useState(false);
 
   return (
     <form
       className="grid gap-5"
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
-        setState("submitted");
+        setPending(true);
+        setState({ message: "", tone: "idle" });
+
+        const formData = new FormData(event.currentTarget);
+        const response = await fetch("/api/links", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            url: formData.get("url"),
+            title: formData.get("title"),
+            category: formData.get("category"),
+            regions: [formData.get("region")],
+          }),
+        });
+        const payload = (await response.json()) as { message?: string };
+
+        if (!response.ok) {
+          setState({
+            message: payload.message ?? "제출에 실패했습니다.",
+            tone: "error",
+          });
+          setPending(false);
+          return;
+        }
+
+        event.currentTarget.reset();
+        setState({
+          message:
+            payload.message ??
+            "제출 완료. 관리자 승인 대기 상태로 저장됐습니다.",
+          tone: "success",
+        });
+        setPending(false);
       }}
     >
       <div className="grid gap-2">
@@ -89,20 +128,27 @@ export function SubmitLinkForm() {
       </div>
 
       <div className="rounded-md border border-zinc-200 bg-zinc-50 p-4 text-sm leading-6 text-zinc-700">
-        제출은 데모 동작입니다. 지금은 DB 저장, OpenAI 요약 생성, 관리자 승인
-        플로우가 붙어 있지 않습니다.
+        제출은 Supabase가 설정되고 로그인된 사용자에게만 실제 저장됩니다.
+        저장된 링크는 관리자 승인 전까지 pending 상태입니다.
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
         <button
           type="submit"
-          className="h-11 rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition hover:bg-zinc-800"
+          disabled={pending}
+          className="h-11 rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          링크 제출 데모
+          {pending ? "저장 중" : "링크 제출"}
         </button>
-        {state === "submitted" ? (
-          <span className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800">
-            mock 제출 완료. 실제 저장은 아직 없습니다.
+        {state.message ? (
+          <span
+            className={`rounded-md border px-3 py-2 text-sm font-semibold ${
+              state.tone === "success"
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                : "border-rose-200 bg-rose-50 text-rose-800"
+            }`}
+          >
+            {state.message}
           </span>
         ) : null}
       </div>

@@ -45,7 +45,7 @@ export type RadarLink = {
   isDailyPick: boolean;
   impactLine: string;
   readingMinutes: number;
-  isSample: true;
+  isSample: boolean;
 };
 
 export const radarLinks: RadarLink[] = [

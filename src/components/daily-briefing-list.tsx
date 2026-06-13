@@ -25,7 +25,7 @@ export function DailyBriefingList({
           </div>
           <div className="min-w-0">
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <SampleBadge />
+              {link.isSample ? <SampleBadge /> : null}
               <Tag tone="category">{link.category}</Tag>
               <span className="text-xs text-zinc-500">
                 {formatKoreanDate(link.submittedAt)}
