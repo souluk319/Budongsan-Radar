@@ -2,6 +2,7 @@
 
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "@/lib/supabase/database.types";
+import { normalizeSupabaseUrl } from "@/lib/supabase/url";
 
 export function createClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,5 +14,5 @@ export function createClient() {
     throw new Error("Supabase public env is not configured.");
   }
 
-  return createBrowserClient<Database>(url, key);
+  return createBrowserClient<Database>(normalizeSupabaseUrl(url), key);
 }

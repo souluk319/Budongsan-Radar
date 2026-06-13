@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { radarLinks } from "../src/lib/radar-data.ts";
+import { normalizeSupabaseUrl } from "../src/lib/supabase/url.ts";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key =
@@ -12,7 +13,7 @@ if (!url || !key) {
   process.exit(1);
 }
 
-const supabase = createClient(url, key, {
+const supabase = createClient(normalizeSupabaseUrl(url), key, {
   auth: {
     autoRefreshToken: false,
     persistSession: false,

@@ -53,6 +53,14 @@ function assertIncludes(body, expected, label) {
   }
 }
 
+function assertIncludesAny(body, expectedList, label) {
+  if (!expectedList.some((expected) => body.includes(expected))) {
+    throw new Error(
+      `${label} is missing one of expected texts: ${expectedList.join(" | ")}`,
+    );
+  }
+}
+
 async function fetchPage(baseUrl, path, expectedStatus = 200) {
   const response = await fetch(`${baseUrl}${path}`);
   const body = await response.text();
@@ -92,7 +100,7 @@ async function main() {
     const home = await fetchPage(baseUrl, "/");
     assertIncludes(home, "오늘 부동산판에서 봐야 할 이슈", "home");
     assertIncludes(home, "샘플 데이터", "home");
-    assertIncludes(home, "Seed fallback", "home");
+    assertIncludesAny(home, ["Seed fallback", "DB 연결"], "home");
 
     const filtered = await fetchPage(
       baseUrl,
@@ -103,13 +111,17 @@ async function main() {
 
     const briefing = await fetchPage(baseUrl, "/briefing");
     assertIncludes(briefing, "오늘의 부동산 이슈 10개", "briefing");
-    assertIncludes(briefing, "seed fallback", "briefing");
+    assertIncludesAny(briefing, ["seed fallback", "Supabase DB"], "briefing");
 
     const detail = await fetchPage(baseUrl, "/links/policy-loan-rule-watch");
     assertIncludes(detail, "3줄 요약", "detail");
     assertIncludes(detail, "왜 중요한가", "detail");
     assertIncludes(detail, "영향 대상", "detail");
-    assertIncludes(detail, "실제 기사, 투자 조언", "detail");
+    assertIncludesAny(
+      detail,
+      ["실제 기사, 투자 조언", "투자 조언, 매수/매도 추천이 아닙니다"],
+      "detail",
+    );
 
     const submit = await fetchPage(baseUrl, "/submit");
     assertIncludes(submit, "링크 제출", "submit");

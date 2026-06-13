@@ -1,5 +1,7 @@
 import "server-only";
 
+import { normalizeSupabaseUrl } from "@/lib/supabase/url";
+
 export type SupabasePublicConfig = {
   url: string;
   key: string;
@@ -25,7 +27,7 @@ export function getSupabasePublicConfig(): SupabasePublicConfig | null {
     return null;
   }
 
-  return { url, key };
+  return { url: normalizeSupabaseUrl(url), key };
 }
 
 export function getSupabaseAdminConfig(): SupabaseAdminConfig | null {
@@ -48,7 +50,12 @@ export function getOpenAIConfig() {
 }
 
 export function getAppUrl() {
-  return readEnv("APP_URL") ?? "http://localhost:3000";
+  const vercelUrl = readEnv("VERCEL_URL");
+
+  return (
+    readEnv("APP_URL") ??
+    (vercelUrl ? `https://${vercelUrl}` : "http://localhost:3000")
+  );
 }
 
 export function getAdminEmails() {
