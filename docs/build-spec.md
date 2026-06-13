@@ -1,10 +1,12 @@
-# Build Spec - Budongsan Radar MVP
+# Build Spec - 집집 MVP
 
 ## Goal
 
 Next.js 기반의 부동산 이슈 큐레이션 MVP를 만든다.
 
 초기 목표는 "매일 볼 만한 부동산 링크와 AI 요약을 보여주는 제품 뼈대"다.
+
+공개 브랜드명은 `집집`이다. `Budongsan Radar`와 `radar` 계열 이름은 내부 코드명/타입명으로만 유지할 수 있다.
 
 ## Recommended Stack
 
@@ -181,4 +183,3 @@ npm run build
 - Saved links
 - Email/Kakao/Telegram daily briefing
 - Region-specific briefing
-

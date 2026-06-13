@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { DailyBriefingList } from "@/components/daily-briefing-list";
+import { AudienceImpactChips } from "@/components/audience-impact-chips";
+import { DailyBriefLead } from "@/components/daily-brief-lead";
 import { FilterBar } from "@/components/filter-bar";
-import { LinkCard } from "@/components/link-card";
+import { IssueBriefList } from "@/components/issue-brief-list";
+import { RegionFlowSection } from "@/components/region-flow-section";
 import { SiteHeader } from "@/components/site-header";
-import {
-  isCategory,
-  isRegion,
-} from "@/lib/radar-data";
+import { TodayPickCard } from "@/components/today-pick-card";
+import { createHomeSignalModel } from "@/lib/home-signals";
+import { isCategory, isRegion } from "@/lib/radar-data";
 import { getHomeData } from "@/lib/radar-repository";
 
 type HomeProps = {
@@ -23,141 +24,87 @@ export default async function Home({ searchParams }: HomeProps) {
     : undefined;
   const selectedRegion = isRegion(params?.region) ? params.region : undefined;
   const {
-    mode,
-    reason,
+    allLinks,
     filteredLinks,
     dailyPicks,
-    trendingLinks,
     totalDailyPicks,
   } = await getHomeData(selectedCategory, selectedRegion);
+  const hasActiveFilter = Boolean(selectedCategory || selectedRegion);
+  const homeModel = createHomeSignalModel({
+    allLinks,
+    filteredLinks,
+    dailyPicks,
+    totalDailyPicks,
+    hasActiveFilter,
+  });
 
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
-        <section className="border-b border-zinc-200 bg-white">
-          <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_21rem] lg:px-8">
-            <div className="min-w-0">
-              <div className="mb-4 flex flex-wrap items-center gap-2">
-                <span className="rounded-md border border-rose-200 bg-rose-50 px-2 py-1 text-xs font-semibold text-rose-800">
-                  {mode === "supabase" ? "DB 연결" : "Seed fallback"}
-                </span>
-                <span className="rounded-md border border-zinc-200 bg-zinc-50 px-2 py-1 text-xs font-semibold text-zinc-600">
-                  {mode === "supabase" ? "실제 저장 지원" : reason ?? "샘플 데이터"}
-                </span>
-              </div>
-              <h2 className="max-w-3xl text-3xl font-bold leading-tight text-zinc-950 sm:text-4xl">
-                오늘 부동산판에서 봐야 할 이슈를 5분 안에 정리한다
-              </h2>
-              <p className="mt-3 max-w-3xl text-base leading-7 text-zinc-600">
-                매물 플랫폼이 아니라 뉴스, 리포트, 정책, 커뮤니티 이슈를
-                사용자 상황별로 해석하는 정보 보드입니다. Supabase가 설정되면
-                실제 링크/저장/추천 흐름을 사용하고, 미설정 상태에서는 seed
-                샘플로 제품 형태를 확인합니다.
-              </p>
-            </div>
+      <main className="flex-1 bg-[#f7f5ef]">
+        <section className="mx-auto grid w-full max-w-6xl gap-4 px-4 pb-6 pt-4 sm:px-6 sm:gap-5 sm:pb-9 sm:pt-7 lg:px-8">
+          <div className="mx-auto w-full max-w-3xl">
+            <DailyBriefLead model={homeModel} />
+          </div>
 
-            <aside className="grid content-start gap-3 border-t border-zinc-200 pt-4 lg:border-l lg:border-t-0 lg:pl-6 lg:pt-0">
-              <div className="grid grid-cols-3 gap-2">
-                <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
-                  <p className="font-mono text-xl font-bold text-zinc-950">
-                    {filteredLinks.length}
-                  </p>
-                  <p className="mt-1 text-xs text-zinc-500">표시 이슈</p>
-                </div>
-                <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
-                  <p className="font-mono text-xl font-bold text-zinc-950">
-                    {totalDailyPicks}
-                  </p>
-                  <p className="mt-1 text-xs text-zinc-500">오늘 픽</p>
-                </div>
-                <div className="rounded-md border border-zinc-200 bg-zinc-50 p-3">
-                  <p className="font-mono text-xl font-bold text-zinc-950">
-                    {mode === "supabase" ? "on" : "off"}
-                  </p>
-                  <p className="mt-1 text-xs text-zinc-500">실제 저장</p>
-                </div>
-              </div>
-              <p className="text-sm leading-6 text-zinc-600">
-                추천/저장/제출은 로그인과 Supabase env가 있을 때 실제 DB에
-                기록됩니다.
-              </p>
-            </aside>
+          <div className="mx-auto grid w-full max-w-3xl gap-4 sm:gap-5">
+            <TodayPickCard
+              link={homeModel.strongestLink}
+              importanceLabel={homeModel.importanceLabel}
+              primaryAudience={homeModel.primaryAudience}
+            />
+            <AudienceImpactChips
+              segments={homeModel.audienceSegments}
+              initialSegmentLabel={homeModel.primaryAudience.label}
+            />
           </div>
         </section>
 
-        <FilterBar
-          selectedCategory={selectedCategory}
-          selectedRegion={selectedRegion}
-        />
-
-        <section className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:px-8">
-          <div className="grid min-w-0 gap-8">
-            <section className="grid gap-4">
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold text-zinc-500">
-                    Today Briefing
-                  </p>
-                  <h2 className="text-2xl font-bold text-zinc-950">
-                    오늘 먼저 볼 이슈
-                  </h2>
-                </div>
-                <Link
-                  href="/briefing"
-                  className="h-9 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 hover:border-zinc-900"
-                >
-                  전체 브리핑
-                </Link>
+        <section className="mx-auto grid w-full max-w-6xl gap-7 px-4 pb-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_22rem] lg:px-8">
+          <div className="grid min-w-0 gap-6">
+            {hasActiveFilter ? (
+              <div className="rounded-md border border-[#eadfce] bg-white px-4 py-3 text-sm leading-6 text-[#51483d]">
+                <span className="font-black text-[#14110f]">관심 기준:</span>{" "}
+                {selectedCategory ?? "전체 카테고리"} ·{" "}
+                {selectedRegion ?? "전체 지역"}에서{" "}
+                <span className="font-mono font-black text-[#14110f]">
+                  {homeModel.visibleIssues}
+                </span>
+                개 이슈를 보고 있습니다.
+                {homeModel.visibleIssues === 0 ? (
+                  <span className="ml-1 font-semibold">
+                    아직 맞는 브리프가 없어 조건을 조금 넓혀보세요.
+                  </span>
+                ) : null}
               </div>
-              <DailyBriefingList links={dailyPicks} />
-            </section>
+            ) : null}
 
-            <section className="grid gap-4">
-              <div>
-                <p className="text-sm font-semibold text-zinc-500">
-                  Latest Links
-                </p>
-                <h2 className="text-2xl font-bold text-zinc-950">
-                  필터 결과
-                </h2>
-              </div>
-              {filteredLinks.length > 0 ? (
-                <div className="grid gap-3">
-                  {filteredLinks.map((link) => (
-                    <LinkCard key={link.id} link={link} />
-                  ))}
-                </div>
-              ) : (
-                <div className="rounded-md border border-zinc-200 bg-white p-6">
-                  <h3 className="text-base font-semibold text-zinc-950">
-                    조건에 맞는 이슈가 없습니다
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-zinc-600">
-                    카테고리나 지역 필터를 줄이면 더 많은 이슈를 볼 수
-                    있습니다.
-                  </p>
-                </div>
-              )}
-            </section>
+            <IssueBriefList links={homeModel.signalTapeLinks} />
           </div>
 
-          <aside className="grid content-start gap-4">
-            <section className="grid gap-3">
+          <aside className="grid content-start gap-5 lg:pt-[4.7rem]">
+            <RegionFlowSection flows={homeModel.regionFlows} />
+            <section className="grid gap-3 rounded-md border border-[#eadfce] bg-white p-4">
               <div>
-                <p className="text-sm font-semibold text-zinc-500">
-                  Trending
+                <p className="text-sm font-black text-[#14110f]">
+                  세입자가 오늘 볼 것
                 </p>
-                <h2 className="text-xl font-bold text-zinc-950">
-                  레이더 점수 상위
-                </h2>
+                <p className="mt-1 text-sm font-semibold leading-6 text-[#6b6254]">
+                  전세 이슈는 보증, 확정일자, 선순위, 전세가율을 같이 봐야
+                  합니다.
+                </p>
               </div>
-              <div className="grid gap-3">
-                {trendingLinks.map((link, index) => (
-                  <LinkCard key={link.id} link={link} rank={index + 1} />
-                ))}
-              </div>
+              <Link
+                href="/tools/jeonse-check"
+                className="inline-flex h-9 w-fit items-center rounded-md bg-[#14110f] px-3.5 text-sm font-black text-white hover:bg-[#342b23]"
+              >
+                전세 안전 체크
+              </Link>
             </section>
+            <FilterBar
+              selectedCategory={selectedCategory}
+              selectedRegion={selectedRegion}
+            />
           </aside>
         </section>
       </main>

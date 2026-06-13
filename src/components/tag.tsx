@@ -5,14 +5,14 @@ type TagProps = {
 
 export function Tag({ children, tone = "plain" }: TagProps) {
   const toneClass = {
-    category: "border-slate-300 bg-slate-100 text-slate-800",
-    region: "border-teal-200 bg-teal-50 text-teal-800",
-    plain: "border-zinc-200 bg-white text-zinc-700",
+    category: "border-[#eadfce] bg-[#fff8ec] text-[#9a4f00]",
+    region: "border-[#e5dac8] bg-white text-[#5e554b]",
+    plain: "border-[#eadfce] bg-white text-[#5e554b]",
   }[tone];
 
   return (
     <span
-      className={`inline-flex h-7 items-center whitespace-nowrap rounded-md border px-2 text-xs font-medium ${toneClass}`}
+      className={`inline-flex h-6 items-center whitespace-nowrap rounded-sm border px-2 text-xs font-bold ${toneClass}`}
     >
       {children}
     </span>

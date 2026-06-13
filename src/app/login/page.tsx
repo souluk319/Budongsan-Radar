@@ -24,31 +24,41 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1">
-        <section className="border-b border-zinc-200 bg-white">
-          <div className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-            <p className="text-sm font-semibold text-zinc-500">Auth</p>
-            <h2 className="mt-2 text-3xl font-bold text-zinc-950">
-              로그인
-            </h2>
-            <p className="mt-3 text-base leading-7 text-zinc-600">
-              Supabase Auth 기반 이메일/비밀번호 로그인입니다.
+      <main className="flex-1 bg-[#f7f5ef]">
+        <section className="mx-auto w-full max-w-5xl px-4 pb-5 pt-5 sm:px-6 sm:pb-7 sm:pt-8 lg:px-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-black text-[#d97706]">계정</p>
+            <h1 className="mt-2 text-[1.85rem] font-black leading-tight text-[#14110f] sm:text-4xl [word-break:keep-all]">
+              저장한 브리프를 이어서 봅니다
+            </h1>
+            <p className="mt-3 max-w-2xl text-base font-semibold leading-7 text-[#51483d]">
+              중요한 이슈를 저장하고, 제보한 링크의 검토 흐름을 이어 봅니다.
             </p>
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-          {!setup.hasSupabasePublic ? (
-            <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-              Supabase public env가 없어 로그인은 아직 동작하지 않습니다.
-              `.env.local`에 `NEXT_PUBLIC_SUPABASE_URL`과 publishable/anon key를
-              넣으면 활성화됩니다.
-            </div>
-          ) : null}
+        <section className="mx-auto grid w-full max-w-5xl items-start gap-5 px-4 pb-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:px-8">
+          <div className="grid gap-4">
+            {!setup.hasSupabasePublic ? (
+              <div className="rounded-md border border-[#f1d09a] bg-[#fff8ec] p-4 text-sm font-semibold leading-6 text-[#7a4a0f]">
+                계정 기능을 준비 중입니다. 지금은 브리프를 먼저 둘러볼 수
+                있습니다.
+              </div>
+            ) : null}
 
-          <div className="mt-4 rounded-md border border-zinc-200 bg-white p-5 shadow-sm sm:p-6">
-            <LoginForm nextPath={nextPath} />
+            <div className="rounded-md border border-[#eadfce] bg-white p-4 sm:p-5">
+              <LoginForm nextPath={nextPath} />
+            </div>
           </div>
+
+          <aside className="self-start rounded-md border border-[#eadfce] bg-white p-4">
+            <p className="text-sm font-black text-[#14110f]">로그인하면</p>
+            <div className="mt-3 divide-y divide-[#eee4d5] text-sm font-semibold leading-6 text-[#51483d]">
+              <p className="py-2">중요한 이슈를 저장해 다시 볼 수 있습니다.</p>
+              <p className="py-2">제보한 링크의 검토 흐름을 이어갈 수 있습니다.</p>
+              <p className="py-2">내 관심 이슈를 놓치지 않고 이어서 봅니다.</p>
+            </div>
+          </aside>
         </section>
       </main>
     </>

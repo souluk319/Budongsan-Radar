@@ -11,10 +11,27 @@ export type SupabaseAdminConfig = SupabasePublicConfig & {
   adminKey: string;
 };
 
+export type DataIngestionConfig = {
+  dataGoKrServiceKey?: string;
+  rebStatsApiBaseUrl: string;
+  rebStatsApiDocUrl?: string;
+  rebStatsApiKey?: string;
+  ecosApiKey?: string;
+  naverClientId?: string;
+  naverClientSecret?: string;
+  lawOpenApiOc?: string;
+};
+
+const REB_STATS_API_BASE_URL = "https://www.reb.or.kr/r-one/openapi/";
+
 function readEnv(name: string) {
   const value = process.env[name]?.trim();
 
   return value && value.length > 0 ? value : undefined;
+}
+
+function ensureTrailingSlash(value: string) {
+  return value.endsWith("/") ? value : `${value}/`;
 }
 
 export function getSupabasePublicConfig(): SupabasePublicConfig | null {
@@ -71,10 +88,26 @@ export function getRssIngestSecret() {
   return readEnv("RSS_INGEST_SECRET");
 }
 
+export function getDataIngestionConfig(): DataIngestionConfig {
+  return {
+    dataGoKrServiceKey: readEnv("DATA_GO_KR_SERVICE_KEY"),
+    rebStatsApiBaseUrl: ensureTrailingSlash(
+      readEnv("REB_STATS_API_BASE_URL") ?? REB_STATS_API_BASE_URL,
+    ),
+    rebStatsApiDocUrl: readEnv("REB_STATS_API_DOC_URL") ?? readEnv("REB_URL"),
+    rebStatsApiKey: readEnv("REB_STATS_API_KEY") ?? readEnv("REB_API"),
+    ecosApiKey: readEnv("ECOS_API_KEY"),
+    naverClientId: readEnv("NAVER_CLIENT_ID"),
+    naverClientSecret: readEnv("NAVER_CLIENT_SECRET"),
+    lawOpenApiOc: readEnv("LAW_OPEN_API_OC"),
+  };
+}
+
 export function getSetupStatus() {
   const supabasePublic = getSupabasePublicConfig();
   const supabaseAdmin = getSupabaseAdminConfig();
   const openai = getOpenAIConfig();
+  const dataIngestion = getDataIngestionConfig();
 
   return {
     hasSupabasePublic: Boolean(supabasePublic),
@@ -82,5 +115,12 @@ export function getSetupStatus() {
     hasOpenAI: Boolean(openai.apiKey),
     hasAdminEmails: getAdminEmails().size > 0,
     hasRssSecret: Boolean(getRssIngestSecret()),
+    hasDataGoKr: Boolean(dataIngestion.dataGoKrServiceKey),
+    hasRebStats: Boolean(dataIngestion.rebStatsApiKey),
+    hasEcos: Boolean(dataIngestion.ecosApiKey),
+    hasNaverSearch: Boolean(
+      dataIngestion.naverClientId && dataIngestion.naverClientSecret,
+    ),
+    hasLawOpenApi: Boolean(dataIngestion.lawOpenApiOc),
   };
 }

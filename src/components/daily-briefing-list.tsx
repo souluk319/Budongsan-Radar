@@ -14,42 +14,40 @@ export function DailyBriefingList({
   showSummary = false,
 }: DailyBriefingListProps) {
   return (
-    <ol className="grid gap-3">
+    <ol className="divide-y divide-[#e3d8c8] border-y border-[#e3d8c8]">
       {links.map((link, index) => (
         <li
           key={link.id}
-          className="grid gap-3 rounded-md border border-zinc-200 bg-white p-4 shadow-sm sm:grid-cols-[2rem_1fr_auto]"
+          className="grid gap-3 py-4 transition hover:bg-white/45 sm:grid-cols-[2.5rem_minmax(0,1fr)] sm:gap-4 sm:px-2"
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-zinc-900 font-mono text-xs font-semibold text-white">
-            {index + 1}
+          <div className="font-mono text-sm font-black leading-6 text-[#b46300]">
+            {String(index + 1).padStart(2, "0")}
           </div>
           <div className="min-w-0">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              {link.isSample ? <SampleBadge /> : null}
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
               <Tag tone="category">{link.category}</Tag>
-              <span className="text-xs text-zinc-500">
+              <ScoreBadge score={link.score} compact />
+              <span className="text-xs font-semibold text-[#7a7064]">
                 {formatKoreanDate(link.submittedAt)}
               </span>
+              {link.isSample ? <SampleBadge /> : null}
             </div>
             <Link
               href={`/links/${link.id}`}
-              className="text-base font-semibold leading-snug text-zinc-950 hover:underline"
+              className="block rounded-sm text-lg font-black leading-snug text-[#14110f] outline-none hover:underline focus-visible:ring-2 focus-visible:ring-[#14110f] [word-break:keep-all]"
             >
               {link.title}
             </Link>
-            <p className="mt-2 text-sm leading-6 text-zinc-600">
+            <p className="mt-1 text-sm font-semibold leading-6 text-[#51483d]">
               {link.impactLine}
             </p>
             {showSummary ? (
-              <ul className="mt-3 grid gap-1 text-sm leading-6 text-zinc-700">
+              <ul className="mt-2 grid gap-1 text-sm leading-6 text-[#6b6254]">
                 {link.summaryBullets.slice(0, 2).map((bullet) => (
                   <li key={bullet}>- {bullet}</li>
                 ))}
               </ul>
             ) : null}
-          </div>
-          <div className="flex items-start sm:justify-end">
-            <ScoreBadge score={link.score} />
           </div>
         </li>
       ))}

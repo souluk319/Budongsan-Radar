@@ -1,21 +1,24 @@
 type ScoreBadgeProps = {
   score: number;
+  compact?: boolean;
 };
 
-export function ScoreBadge({ score }: ScoreBadgeProps) {
+export function ScoreBadge({ score, compact = false }: ScoreBadgeProps) {
+  const label = score >= 86 ? "높음" : score >= 75 ? "보통" : "낮음";
   const tone =
-    score >= 85
-      ? "border-emerald-300 bg-emerald-50 text-emerald-900"
+    score >= 86
+      ? "border-[#f4b98b] bg-[#fff4ea] text-[#9a4f00]"
       : score >= 75
-        ? "border-sky-300 bg-sky-50 text-sky-900"
-        : "border-amber-300 bg-amber-50 text-amber-900";
+        ? "border-[#b7d7ff] bg-[#eef6ff] text-[#155ca8]"
+        : "border-[#e5dac8] bg-white text-[#5e554b]";
 
   return (
     <span
-      className={`inline-flex h-10 min-w-14 items-center justify-center rounded-md border px-2 font-mono text-sm font-semibold ${tone}`}
-      aria-label={`레이더 점수 ${score}점`}
+      className={`inline-flex h-7 items-center justify-center rounded-sm border px-2 text-xs font-black ${tone}`}
+      aria-label={`중요도 ${score}점`}
+      title={`내부 중요도 ${score}점`}
     >
-      {score}
+      {compact ? label : `중요도 ${label}`}
     </span>
   );
 }

@@ -1,10 +1,12 @@
-# Codex Implementation Prompt - Budongsan Radar
+# Codex Implementation Prompt - 집집
 
-You are implementing the first MVP of Budongsan Radar, a Korean real estate issue curation product.
+You are implementing the first MVP of 집집, a Korean real estate issue curation product.
 
 ## Context
 
-Budongsan Radar is "GeekNews for real estate."
+집집 is "GeekNews for real estate."
+
+The internal project codename may still be Budongsan Radar, and existing code may still use `radar` in file names or type names. Do not rename internal code identifiers unless explicitly requested. Public-facing UI copy should use `집집`.
 
 It is not a real estate listing marketplace. It starts as a curated link board where users can read important real estate news, reports, data links, and community posts. Each item has an AI-style summary explaining why the issue matters and who it affects.
 
@@ -98,4 +100,3 @@ At the end, report:
 - What is mock/demo
 - Verification result
 - Recommended next step
-

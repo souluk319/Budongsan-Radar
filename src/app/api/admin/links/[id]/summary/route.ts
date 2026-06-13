@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth";
 import { generateRadarSummary } from "@/lib/summary";
-import { mapLinkRow } from "@/lib/radar-repository";
+import { getEvidenceForLink, mapLinkRow } from "@/lib/radar-repository";
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
 
 type RouteContext = {
@@ -44,9 +44,11 @@ export async function POST(_request: Request, { params }: RouteContext) {
 
   try {
     const link = mapLinkRow(row);
+    const evidence = await getEvidenceForLink(id);
     const { model, summary } = await generateRadarSummary({
       ...link,
       rawExcerpt: row.raw_excerpt,
+      evidence,
     });
 
     const { error: summaryError } = await supabase.from("summaries").insert({
@@ -56,6 +58,9 @@ export async function POST(_request: Request, { params }: RouteContext) {
       why_it_matters: summary.whyItMatters,
       audience_impact: summary.audienceImpact,
       checkpoints: summary.checkpoints,
+      grounding_notes: summary.groundingNotes,
+      uncertainties: summary.uncertainties,
+      source_observation_ids: evidence.map((observation) => observation.id),
       confidence: summary.confidence,
     });
 
@@ -73,6 +78,8 @@ export async function POST(_request: Request, { params }: RouteContext) {
         why_it_matters: summary.whyItMatters,
         audience_impact: summary.audienceImpact,
         checkpoints: summary.checkpoints,
+        grounding_notes: summary.groundingNotes,
+        uncertainties: summary.uncertainties,
         impact_line: summary.impactLine,
         score: summary.score,
       })

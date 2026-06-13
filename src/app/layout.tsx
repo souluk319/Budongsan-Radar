@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,10 +12,50 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const appUrl =
+  process.env.APP_URL?.startsWith("http") ? process.env.APP_URL : "http://localhost:3000";
+const appDescription =
+  "오늘 부동산 이슈를 내 상황 기준으로 쉽게 집어주는 데일리 브리프";
+
 export const metadata: Metadata = {
-  title: "부동산 레이더",
-  description:
-    "부동산 뉴스, 정책, 데이터 이슈를 사용자 상황별로 해석하는 큐레이션 MVP",
+  metadataBase: new URL(appUrl),
+  applicationName: "집집",
+  title: {
+    default: "집집",
+    template: "%s | 집집",
+  },
+  description: appDescription,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "ko_KR",
+    url: "/",
+    siteName: "집집",
+    title: "집집",
+    description: appDescription,
+  },
+  twitter: {
+    card: "summary",
+    title: "집집",
+    description: appDescription,
+  },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f7f5ef",
+  colorScheme: "light",
 };
 
 export default function RootLayout({

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { formatKoreanDate, type RadarLink } from "@/lib/radar-data";
-import { ActionButtons } from "@/components/action-buttons";
 import { SampleBadge } from "@/components/sample-badge";
 import { ScoreBadge } from "@/components/score-badge";
 import { Tag } from "@/components/tag";
@@ -12,48 +11,44 @@ type LinkCardProps = {
 
 export function LinkCard({ link, rank }: LinkCardProps) {
   return (
-    <article className="grid gap-4 rounded-md border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-zinc-400 sm:grid-cols-[1fr_auto]">
+    <article className="border-b border-[#e3d8c8] py-4 transition hover:bg-white/55">
       <div className="min-w-0">
-        <div className="mb-3 flex flex-wrap items-center gap-2">
+        <div className="mb-2 flex flex-wrap items-center gap-1.5">
           {typeof rank === "number" ? (
-            <span className="inline-flex h-7 min-w-8 items-center justify-center rounded-md bg-zinc-900 px-2 font-mono text-xs font-semibold text-white">
+            <span className="font-mono text-xs font-black text-[#9a4f00]">
               #{rank}
             </span>
           ) : null}
-          {link.isSample ? <SampleBadge /> : null}
           <Tag tone="category">{link.category}</Tag>
+          <ScoreBadge score={link.score} compact />
           {link.regions.map((region) => (
             <Tag key={region} tone="region">
               {region}
             </Tag>
           ))}
+          {link.isSample ? <SampleBadge /> : null}
         </div>
 
         <Link
           href={`/links/${link.id}`}
-          className="group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-zinc-900"
+          className="group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#14110f]"
         >
-          <h2 className="text-lg font-semibold leading-snug text-zinc-950 group-hover:underline">
+          <h2 className="text-base font-black leading-snug text-[#14110f] group-hover:underline sm:text-lg [word-break:keep-all]">
             {link.title}
           </h2>
-          <p className="mt-2 line-clamp-2 text-sm leading-6 text-zinc-600">
+          <p className="mt-1 line-clamp-2 text-sm font-semibold leading-6 text-[#51483d]">
             {link.impactLine}
           </p>
         </Link>
 
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-xs text-zinc-500">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-[#7a7064]">
           <span>{link.sourceName}</span>
           <span>{formatKoreanDate(link.submittedAt)}</span>
           <span>{link.readingMinutes}분 읽기</span>
+          {link.evidenceCount && link.evidenceCount > 0 ? (
+            <span>공식 근거 {link.evidenceCount}개</span>
+          ) : null}
         </div>
-
-        <div className="mt-4">
-          <ActionButtons linkId={link.id} compact />
-        </div>
-      </div>
-
-      <div className="flex items-start sm:justify-end">
-        <ScoreBadge score={link.score} />
       </div>
     </article>
   );

@@ -14,6 +14,22 @@ type LoginFormProps = {
   nextPath: string;
 };
 
+function toFriendlyAuthMessage(message: string | undefined, fallback: string) {
+  if (!message) {
+    return fallback;
+  }
+
+  if (/supabase|env|환경변수/i.test(message)) {
+    return "지금은 계정 기능을 준비 중입니다. 브리프는 바로 둘러볼 수 있습니다.";
+  }
+
+  if (/이메일 확인|메일 확인|email/i.test(message)) {
+    return "가입 요청이 도착했습니다. 메일함을 확인한 뒤 다시 로그인해주세요.";
+  }
+
+  return message;
+}
+
 export function LoginForm({ nextPath }: LoginFormProps) {
   const router = useRouter();
   const [mode, setMode] = useState<Mode>("sign-in");
@@ -42,7 +58,10 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
     if (!response.ok) {
       setState({
-        message: payload.message ?? "인증 처리에 실패했습니다.",
+        message: toFriendlyAuthMessage(
+          payload.message,
+          "로그인 처리에 실패했습니다. 이메일과 비밀번호를 다시 확인해주세요.",
+        ),
         tone: "error",
       });
       setPending(false);
@@ -51,9 +70,10 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
     if (mode === "sign-up") {
       setState({
-        message:
-          payload.message ??
-          "가입 요청이 처리됐습니다. 이메일 확인 설정이 켜져 있으면 메일을 확인하세요.",
+        message: toFriendlyAuthMessage(
+          payload.message,
+          "가입 요청이 도착했습니다. 메일함을 확인한 뒤 다시 로그인해주세요.",
+        ),
         tone: "success",
       });
       setPending(false);
@@ -66,12 +86,21 @@ export function LoginForm({ nextPath }: LoginFormProps) {
 
   return (
     <form action={submit} className="grid gap-5">
-      <div className="inline-grid grid-cols-2 rounded-md border border-zinc-300 bg-zinc-100 p-1">
+      <div>
+        <p className="text-sm font-black text-[#d97706]">이메일로 로그인</p>
+        <h3 className="mt-1 text-xl font-black leading-snug text-[#14110f]">
+          집집 브리프를 내 계정에 이어둡니다
+        </h3>
+      </div>
+
+      <div className="inline-grid grid-cols-2 rounded-md border border-[#eadfce] bg-[#fff8ec] p-1">
         <button
           type="button"
           onClick={() => setMode("sign-in")}
           className={`h-9 rounded px-3 text-sm font-semibold ${
-            mode === "sign-in" ? "bg-white text-zinc-950 shadow-sm" : "text-zinc-600"
+            mode === "sign-in"
+              ? "bg-white text-[#14110f]"
+              : "text-[#7a7064]"
           }`}
         >
           로그인
@@ -80,7 +109,9 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           type="button"
           onClick={() => setMode("sign-up")}
           className={`h-9 rounded px-3 text-sm font-semibold ${
-            mode === "sign-up" ? "bg-white text-zinc-950 shadow-sm" : "text-zinc-600"
+            mode === "sign-up"
+              ? "bg-white text-[#14110f]"
+              : "text-[#7a7064]"
           }`}
         >
           가입
@@ -88,7 +119,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-semibold text-zinc-900" htmlFor="email">
+        <label className="text-sm font-black text-[#14110f]" htmlFor="email">
           이메일
         </label>
         <input
@@ -97,13 +128,14 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           name="email"
           type="email"
           autoComplete="email"
-          className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-900"
+          placeholder="name@example.com"
+          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-semibold text-zinc-900"
+          className="text-sm font-black text-[#14110f]"
           htmlFor="password"
         >
           비밀번호
@@ -115,24 +147,25 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           type="password"
           minLength={6}
           autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
-          className="h-11 rounded-md border border-zinc-300 bg-white px-3 text-sm text-zinc-950 outline-none transition focus:border-zinc-900"
+          placeholder="6자 이상"
+          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="h-11 rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-11 rounded-md bg-[#14110f] px-4 text-sm font-black text-white transition hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {pending ? "처리 중" : mode === "sign-in" ? "로그인" : "계정 만들기"}
+        {pending ? "처리 중" : mode === "sign-in" ? "브리프 이어보기" : "계정 만들기"}
       </button>
 
       {state.message ? (
         <p
           className={`rounded-md border px-3 py-2 text-sm font-semibold ${
             state.tone === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-              : "border-rose-200 bg-rose-50 text-rose-800"
+              ? "border-[#b9dec7] bg-[#f0fbf3] text-[#176b3a]"
+              : "border-[#f0c8c4] bg-[#fff4f2] text-[#9f2f25]"
           }`}
         >
           {state.message}

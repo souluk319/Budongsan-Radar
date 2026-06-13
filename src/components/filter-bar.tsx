@@ -32,20 +32,24 @@ export function FilterBar({
   selectedRegion,
 }: FilterBarProps) {
   return (
-    <section className="border-y border-zinc-200 bg-zinc-50">
-      <div className="mx-auto grid w-full max-w-7xl gap-4 px-4 py-4 sm:px-6 lg:px-8">
+    <section className="grid gap-4 rounded-md border border-[#eadfce] bg-white p-4">
         <div className="flex items-center justify-between gap-3">
-          <h2 className="text-sm font-semibold text-zinc-950">필터</h2>
+          <div>
+            <p className="text-sm font-bold text-[#7a7064]">관심 기준</p>
+            <h2 className="mt-1 text-xl font-black text-[#14110f]">
+              흐름 좁혀보기
+            </h2>
+          </div>
           <Link
             href="/"
-            className="h-8 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:border-zinc-900"
+            className="h-8 rounded-md border border-[#e5dac8] bg-white px-3 py-1.5 text-xs font-bold text-[#5e554b] hover:border-[#14110f]"
           >
-            초기화
+            전체 보기
           </Link>
         </div>
 
         <div className="grid gap-3">
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="filter-scroll flex gap-2 overflow-x-auto pb-1">
             <Link
               href={buildHref(undefined, selectedRegion)}
               className={`filter-chip ${!selectedCategory ? "filter-chip-active" : ""}`}
@@ -63,7 +67,7 @@ export function FilterBar({
             ))}
           </div>
 
-          <div className="flex gap-2 overflow-x-auto pb-1">
+          <div className="filter-scroll flex gap-2 overflow-x-auto pb-1">
             <Link
               href={buildHref(selectedCategory, undefined)}
               className={`filter-chip ${!selectedRegion ? "filter-chip-active" : ""}`}
@@ -81,7 +85,6 @@ export function FilterBar({
             ))}
           </div>
         </div>
-      </div>
     </section>
   );
 }

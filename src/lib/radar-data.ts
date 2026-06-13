@@ -29,6 +29,44 @@ export type AudienceImpact = {
   investor: string;
 };
 
+export type EvidenceSource =
+  | "sample"
+  | "naver"
+  | "ecos"
+  | "data_go_kr"
+  | "reb"
+  | "law"
+  | "admin";
+
+export type EvidenceKind =
+  | "news_context"
+  | "interest_rate"
+  | "trade"
+  | "rent"
+  | "market_stat"
+  | "law"
+  | "policy"
+  | "subscription"
+  | "source_status";
+
+export type EvidenceObservation = {
+  id: string;
+  dedupeKey: string;
+  source: EvidenceSource;
+  kind: EvidenceKind;
+  title: string;
+  summary: string;
+  sourceUrl?: string | null;
+  observedAt: string;
+  regionName?: string | null;
+  entityLabel?: string | null;
+  metricLabel?: string | null;
+  metricValue?: number | null;
+  metricUnit?: string | null;
+  isSample: boolean;
+  confidence: number;
+};
+
 export type RadarLink = {
   id: string;
   title: string;
@@ -46,7 +84,87 @@ export type RadarLink = {
   impactLine: string;
   readingMinutes: number;
   isSample: boolean;
+  evidenceCount?: number;
+  evidenceUpdatedAt?: string | null;
+  groundingNotes?: string[];
+  uncertainties?: string[];
 };
+
+const sampleObservedAt = "2026-06-13T09:00:00+09:00";
+
+export function getSampleEvidenceForLink(link: Pick<RadarLink, "id" | "category" | "regions" | "sourceUrl" | "isSample">): EvidenceObservation[] {
+  const primaryRegion =
+    link.regions.find((region) => region !== "전국") ?? "전국";
+  const prefix = `sample:${link.id}`;
+  const commonSourceUrl = link.sourceUrl;
+  const interestRateEvidence: EvidenceObservation = {
+    id: `${prefix}:ecos-rate`,
+    dedupeKey: `${prefix}:ecos-rate`,
+    source: "sample",
+    kind: "interest_rate",
+    title: "한국은행 기준금리 흐름 확인",
+    summary:
+      "금리 이슈는 대출 가능액보다 월 상환액과 전세 대출 조건에 먼저 영향을 줍니다.",
+    sourceUrl: commonSourceUrl,
+    observedAt: sampleObservedAt,
+    regionName: "전국",
+    entityLabel: "금리 환경",
+    metricLabel: "기준금리",
+    metricValue: 2.75,
+    metricUnit: "%",
+    isSample: true,
+    confidence: 0.62,
+  };
+  const tradeEvidence: EvidenceObservation = {
+    id: `${prefix}:trade-sample`,
+    dedupeKey: `${prefix}:trade-sample`,
+    source: "sample",
+    kind: link.category === "전세/월세" ? "rent" : "trade",
+    title: `${primaryRegion} 거래 흐름 표본`,
+    summary:
+      "지역 이슈는 기사 문장만 보지 말고 거래량, 전월세 조건, 공급 물량 같은 공식 지표로 다시 확인해야 합니다.",
+    sourceUrl: commonSourceUrl,
+    observedAt: sampleObservedAt,
+    regionName: primaryRegion,
+    entityLabel: "지역 표본",
+    metricLabel: link.category === "전세/월세" ? "전월세 점검" : "거래 점검",
+    metricValue: null,
+    metricUnit: null,
+    isSample: true,
+    confidence: 0.58,
+  };
+  const lawEvidence: EvidenceObservation = {
+    id: `${prefix}:law-check`,
+    dedupeKey: `${prefix}:law-check`,
+    source: "sample",
+    kind: "law",
+    title:
+      link.category === "전세/월세"
+        ? "임대차 보호 장치 확인"
+        : "정책·제도 문구 확인",
+    summary:
+      "제도 변화는 발표 기사보다 시행일, 적용 대상, 예외 조건을 원문 기준으로 확인해야 합니다.",
+    sourceUrl: commonSourceUrl,
+    observedAt: sampleObservedAt,
+    regionName: "전국",
+    entityLabel: "제도 확인",
+    metricLabel: null,
+    metricValue: null,
+    metricUnit: null,
+    isSample: true,
+    confidence: 0.55,
+  };
+
+  if (link.category === "대출/금리") {
+    return [interestRateEvidence, lawEvidence];
+  }
+
+  if (link.category === "정책" || link.category === "전세/월세") {
+    return [lawEvidence, tradeEvidence, interestRateEvidence];
+  }
+
+  return [tradeEvidence, lawEvidence];
+}
 
 export const radarLinks: RadarLink[] = [
   {
@@ -141,7 +259,7 @@ export const radarLinks: RadarLink[] = [
     ],
     score: 86,
     isDailyPick: true,
-    impactLine: "핵심 입지 선호가 강해지는지 확인하는 수요 온도계",
+    impactLine: "핵심 입지 선호가 강해지는지 확인하는 수요 신호",
     readingMinutes: 3,
     isSample: true,
   },
@@ -346,7 +464,7 @@ export const radarLinks: RadarLink[] = [
     category: "매매시장",
     regions: ["지방 중소도시"],
     summaryBullets: [
-      "미분양 재고 흐름을 지방 시장 온도계로 보는 샘플입니다.",
+      "미분양 재고 흐름을 지방 수요 약화 신호로 보는 샘플입니다.",
       "준공 후 미분양 증가는 가격 압력으로 이어질 수 있습니다.",
       "지역 산업과 인구 흐름을 같이 봐야 합니다.",
     ],

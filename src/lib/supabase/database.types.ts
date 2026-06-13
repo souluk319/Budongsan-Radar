@@ -9,6 +9,291 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      regions: {
+        Row: {
+          id: string;
+          name: string;
+          level:
+            | "country"
+            | "metro"
+            | "province"
+            | "city"
+            | "district"
+            | "neighborhood";
+          parent_id: string | null;
+          aliases: string[];
+          external_refs: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          name: string;
+          level:
+            | "country"
+            | "metro"
+            | "province"
+            | "city"
+            | "district"
+            | "neighborhood";
+          parent_id?: string | null;
+          aliases?: string[];
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          level?:
+            | "country"
+            | "metro"
+            | "province"
+            | "city"
+            | "district"
+            | "neighborhood";
+          parent_id?: string | null;
+          aliases?: string[];
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      complexes: {
+        Row: {
+          id: string;
+          name: string;
+          region_id: string | null;
+          address: string | null;
+          road_address: string | null;
+          jibun_address: string | null;
+          latitude: number | null;
+          longitude: number | null;
+          external_refs: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          name: string;
+          region_id?: string | null;
+          address?: string | null;
+          road_address?: string | null;
+          jibun_address?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          region_id?: string | null;
+          address?: string | null;
+          road_address?: string | null;
+          jibun_address?: string | null;
+          latitude?: number | null;
+          longitude?: number | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      buildings: {
+        Row: {
+          id: string;
+          complex_id: string | null;
+          region_id: string | null;
+          name: string | null;
+          address: string | null;
+          building_register_pk: string | null;
+          external_refs: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          complex_id?: string | null;
+          region_id?: string | null;
+          name?: string | null;
+          address?: string | null;
+          building_register_pk?: string | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          complex_id?: string | null;
+          region_id?: string | null;
+          name?: string | null;
+          address?: string | null;
+          building_register_pk?: string | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      units: {
+        Row: {
+          id: string;
+          building_id: string;
+          label: string | null;
+          area_m2: number | null;
+          floor: string | null;
+          external_refs: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          building_id: string;
+          label?: string | null;
+          area_m2?: number | null;
+          floor?: string | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          building_id?: string;
+          label?: string | null;
+          area_m2?: number | null;
+          floor?: string | null;
+          external_refs?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      data_observations: {
+        Row: {
+          id: string;
+          dedupe_key: string;
+          source: "sample" | "naver" | "ecos" | "data_go_kr" | "reb" | "law" | "admin";
+          kind:
+            | "news_context"
+            | "interest_rate"
+            | "trade"
+            | "rent"
+            | "market_stat"
+            | "law"
+            | "policy"
+            | "subscription"
+            | "source_status";
+          title: string;
+          summary: string;
+          source_url: string | null;
+          observed_at: string;
+          region_id: string | null;
+          complex_id: string | null;
+          building_id: string | null;
+          unit_id: string | null;
+          region_name: string | null;
+          entity_label: string | null;
+          metric_label: string | null;
+          metric_value: number | null;
+          metric_unit: string | null;
+          payload: Json;
+          is_sample: boolean;
+          confidence: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          dedupe_key: string;
+          source: "sample" | "naver" | "ecos" | "data_go_kr" | "reb" | "law" | "admin";
+          kind:
+            | "news_context"
+            | "interest_rate"
+            | "trade"
+            | "rent"
+            | "market_stat"
+            | "law"
+            | "policy"
+            | "subscription"
+            | "source_status";
+          title: string;
+          summary: string;
+          source_url?: string | null;
+          observed_at?: string;
+          region_id?: string | null;
+          complex_id?: string | null;
+          building_id?: string | null;
+          unit_id?: string | null;
+          region_name?: string | null;
+          entity_label?: string | null;
+          metric_label?: string | null;
+          metric_value?: number | null;
+          metric_unit?: string | null;
+          payload?: Json;
+          is_sample?: boolean;
+          confidence?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          dedupe_key?: string;
+          source?: "sample" | "naver" | "ecos" | "data_go_kr" | "reb" | "law" | "admin";
+          kind?:
+            | "news_context"
+            | "interest_rate"
+            | "trade"
+            | "rent"
+            | "market_stat"
+            | "law"
+            | "policy"
+            | "subscription"
+            | "source_status";
+          title?: string;
+          summary?: string;
+          source_url?: string | null;
+          observed_at?: string;
+          region_id?: string | null;
+          complex_id?: string | null;
+          building_id?: string | null;
+          unit_id?: string | null;
+          region_name?: string | null;
+          entity_label?: string | null;
+          metric_label?: string | null;
+          metric_value?: number | null;
+          metric_unit?: string | null;
+          payload?: Json;
+          is_sample?: boolean;
+          confidence?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      link_observations: {
+        Row: {
+          link_id: string;
+          observation_id: string;
+          relevance: number;
+          created_at: string;
+        };
+        Insert: {
+          link_id: string;
+          observation_id: string;
+          relevance?: number;
+          created_at?: string;
+        };
+        Update: {
+          link_id?: string;
+          observation_id?: string;
+          relevance?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;
@@ -54,6 +339,10 @@ export type Database = {
           created_by: string | null;
           source_type: "sample" | "user" | "rss" | "admin";
           raw_excerpt: string | null;
+          evidence_count: number;
+          evidence_updated_at: string | null;
+          grounding_notes: string[];
+          uncertainties: string[];
           created_at: string;
           updated_at: string;
         };
@@ -79,6 +368,10 @@ export type Database = {
           created_by?: string | null;
           source_type?: "sample" | "user" | "rss" | "admin";
           raw_excerpt?: string | null;
+          evidence_count?: number;
+          evidence_updated_at?: string | null;
+          grounding_notes?: string[];
+          uncertainties?: string[];
           created_at?: string;
           updated_at?: string;
         };
@@ -104,6 +397,10 @@ export type Database = {
           created_by?: string | null;
           source_type?: "sample" | "user" | "rss" | "admin";
           raw_excerpt?: string | null;
+          evidence_count?: number;
+          evidence_updated_at?: string | null;
+          grounding_notes?: string[];
+          uncertainties?: string[];
           created_at?: string;
           updated_at?: string;
         };
@@ -119,6 +416,9 @@ export type Database = {
           audience_impact: Json;
           checkpoints: string[];
           confidence: number;
+          grounding_notes: string[];
+          uncertainties: string[];
+          source_observation_ids: string[];
           created_at: string;
         };
         Insert: {
@@ -130,6 +430,9 @@ export type Database = {
           audience_impact: Json;
           checkpoints: string[];
           confidence: number;
+          grounding_notes?: string[];
+          uncertainties?: string[];
+          source_observation_ids?: string[];
           created_at?: string;
         };
         Update: {
@@ -141,6 +444,9 @@ export type Database = {
           audience_impact?: Json;
           checkpoints?: string[];
           confidence?: number;
+          grounding_notes?: string[];
+          uncertainties?: string[];
+          source_observation_ids?: string[];
           created_at?: string;
         };
         Relationships: [];

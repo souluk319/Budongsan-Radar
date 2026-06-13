@@ -17,7 +17,7 @@ export function SignOutButton() {
         router.refresh();
         setPending(false);
       }}
-      className="h-9 rounded-md border border-zinc-300 bg-white px-3 text-sm font-semibold text-zinc-700 transition hover:border-zinc-900 disabled:cursor-not-allowed disabled:opacity-60"
+      className="h-8 rounded-md border border-[#d9cdbc] bg-white px-2.5 text-xs font-bold text-[#5e554b] transition hover:border-[#14110f] hover:text-[#14110f] disabled:cursor-not-allowed disabled:opacity-60 sm:h-9 sm:px-3 sm:text-sm"
     >
       로그아웃
     </button>

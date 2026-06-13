@@ -12,6 +12,22 @@ type Notice = {
   tone: "success" | "error";
 };
 
+function toFriendlyActionMessage(message: string | undefined) {
+  if (!message) {
+    return "처리하지 못했습니다. 잠시 후 다시 시도해주세요.";
+  }
+
+  if (/supabase|env|환경변수/i.test(message)) {
+    return "지금은 저장 기능을 준비 중입니다. 브리프는 계속 볼 수 있습니다.";
+  }
+
+  if (/로그인|인증|auth/i.test(message)) {
+    return "로그인하면 추천과 저장을 사용할 수 있습니다.";
+  }
+
+  return message;
+}
+
 export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
   const [recommended, setRecommended] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -33,7 +49,7 @@ export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
 
     if (!response.ok) {
       setNotice({
-        message: payload.message ?? "처리에 실패했습니다.",
+        message: toFriendlyActionMessage(payload.message),
         tone: "error",
       });
       setPending(null);
@@ -67,7 +83,7 @@ export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
           type="button"
           disabled={pending === "vote"}
           onClick={() => mutate("vote")}
-          className="h-9 rounded-md border border-zinc-300 bg-white px-3 text-sm font-semibold text-zinc-800 transition hover:border-zinc-900 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-md border border-[#e5dac8] bg-white px-3 text-sm font-bold text-[#2b2520] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {recommended ? "추천됨" : compact ? "추천" : "추천"}
         </button>
@@ -75,11 +91,13 @@ export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
           type="button"
           disabled={pending === "save"}
           onClick={() => mutate("save")}
-          className="h-9 rounded-md border border-zinc-300 bg-white px-3 text-sm font-semibold text-zinc-800 transition hover:border-zinc-900 hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-md border border-[#e5dac8] bg-white px-3 text-sm font-bold text-[#2b2520] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saved ? "저장됨" : compact ? "저장" : "저장"}
         </button>
-        <span className="text-xs text-zinc-500">로그인 시 실제 저장</span>
+        <span className="text-xs font-semibold text-[#7a7064]">
+          로그인하면 저장돼요
+        </span>
       </div>
       {notice ? (
         <p

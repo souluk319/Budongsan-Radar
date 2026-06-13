@@ -1,16 +1,22 @@
-# Product Brief - Budongsan Radar
+# Product Brief - 집집
 
 ## Product Name
 
-Budongsan Radar
+집집
 
-Korean display name candidates:
+Internal codename:
 
-- 부동산 레이더
-- 집뉴스
-- 프롭뉴스
+- Budongsan Radar
 
-Recommended working name: 부동산 레이더
+Feature language:
+
+- 집픽
+- 오늘의 집픽
+- 집집 브리프
+
+Tagline candidate:
+
+> 오늘 부동산 이슈, 쉽게 집어드립니다.
 
 ## Problem
 
@@ -32,6 +38,8 @@ Recommended working name: 부동산 레이더
 ## Core Value
 
 사용자가 매일 5분 안에 오늘의 부동산 이슈를 파악하고, 자신에게 의미 있는 이슈만 골라볼 수 있게 한다.
+
+공개 브랜드는 `집집`으로 간다. 짧고 발음이 쉽고, 반복어라 기억과 밈화에 유리하다. `집픽`은 메인 브랜드가 아니라 오늘의 핵심 이슈를 집어주는 기능/섹션명으로 사용한다.
 
 ## Primary Users
 
@@ -149,4 +157,3 @@ MVP 성공 기준:
 ## Recommended First Version
 
 관리자가 링크를 등록하면 AI가 요약하고, 사용자는 홈/카테고리/상세 페이지에서 읽는 읽기 중심 MVP로 시작한다.
-
