@@ -7,17 +7,17 @@ type BrandLogoProps = {
 
 const toneStyles = {
   dark: {
-    mark: "text-[#d6e85c]",
+    accent: "text-[#d6e85c]",
     word: "text-white",
     tag: "text-white/58",
   },
   hero: {
-    mark: "text-[#d6e85c]",
+    accent: "text-[#d6e85c]",
     word: "text-white",
     tag: "text-white/68",
   },
   light: {
-    mark: "text-[#07110f]",
+    accent: "text-[#07110f]",
     word: "text-[#07110f]",
     tag: "text-[#07110f]/58",
   },
@@ -32,49 +32,62 @@ export function BrandLogo({
   const styles = toneStyles[tone];
 
   return (
-    <span className={`inline-flex min-w-0 items-center gap-2 ${className}`}>
-      <span
-        className={`grid size-8 shrink-0 place-items-center ${styles.mark}`}
-        aria-hidden="true"
-      >
+    <span className={`inline-grid min-w-0 gap-1 ${className}`}>
+      <span className="relative block h-7 w-[6.45rem] sm:h-8 sm:w-[7.35rem]">
+        <span className="sr-only">집집</span>
         <svg
-          viewBox="0 0 36 36"
-          className="size-8"
+          viewBox="0 0 122 34"
+          className="h-full w-full overflow-visible"
           role="img"
           focusable="false"
+          aria-hidden="true"
         >
-          <path
-            d="M7.8 10.5h8.4l-8.4 15h8.4"
+          <g
             fill="none"
-            stroke="currentColor"
             strokeLinecap="square"
             strokeLinejoin="miter"
-            strokeWidth="4"
-          />
-          <path
-            d="M19.8 10.5h8.4l-8.4 15h8.4"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="square"
-            strokeLinejoin="miter"
-            strokeWidth="4"
-          />
+            strokeWidth="4.4"
+          >
+            <path
+              d="M3 7h17L3 27h17"
+              className={styles.accent}
+              stroke="currentColor"
+            />
+            <path
+              d="M28 7v20"
+              className={styles.word}
+              stroke="currentColor"
+            />
+            <path
+              d="M38 7h20v20H38z M38 17h20"
+              className={styles.word}
+              stroke="currentColor"
+            />
+            <path
+              d="M67 7h17L67 27h17"
+              className={styles.accent}
+              stroke="currentColor"
+            />
+            <path
+              d="M92 7v20"
+              className={styles.word}
+              stroke="currentColor"
+            />
+            <path
+              d="M102 7h20v20h-20z M102 17h20"
+              className={styles.word}
+              stroke="currentColor"
+            />
+          </g>
         </svg>
       </span>
-      <span className="grid min-w-0 gap-0.5">
+      {!compact && tagline ? (
         <span
-          className={`block whitespace-nowrap text-[1.32rem] font-black leading-none tracking-[0.02em] ${styles.word}`}
+          className={`block whitespace-nowrap pl-0.5 text-[0.62rem] font-semibold leading-none tracking-[0.18em] ${styles.tag}`}
         >
-          집집
+          {tagline}
         </span>
-        {!compact && tagline ? (
-          <span
-            className={`block whitespace-nowrap text-[0.62rem] font-semibold leading-none tracking-[0.18em] ${styles.tag}`}
-          >
-            {tagline}
-          </span>
-        ) : null}
-      </span>
+      ) : null}
     </span>
   );
 }
