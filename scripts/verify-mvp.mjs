@@ -176,8 +176,9 @@ async function main() {
     assertIncludes(home, "집값을", "home");
     assertIncludes(home, "먼저 읽다", "home");
     assertIncludes(home, "시작하기", "home");
-    assertIncludes(home, "도시 야경과 아파트 스카이라인", "home");
-    assertIncludes(home, "아파트가 있는 도시 야경", "home");
+    assertIncludes(home, "도시 야경과 도심 속 공원 사진", "home");
+    assertIncludes(home, "아파트와 도심 야경", "home");
+    assertIncludes(home, "도심 속 공원과 아파트 야경", "home");
     assertIncludes(home, "실제 수집", "home");
     assertIncludes(home, "근거", "home");
     assertIncludes(home, "주의", "home");

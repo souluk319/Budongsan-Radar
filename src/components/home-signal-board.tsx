@@ -7,22 +7,42 @@ type HomeSignalBoardProps = {
   liveLinkCount: number;
 };
 
-function NightCityVisual() {
+const heroPhotos = [
+  {
+    src: "/hero-night-city.png",
+    alt: "아파트와 도심 야경",
+  },
+  {
+    src: "/hero-urban-park.png",
+    alt: "도심 속 공원과 아파트 야경",
+  },
+];
+
+function HeroPhotoRotator() {
   return (
     <div
-      aria-label="도시 야경과 아파트 스카이라인"
-      className="relative mx-auto h-[23rem] w-full max-w-[35rem] overflow-hidden sm:h-[35rem] lg:h-[44rem] lg:max-w-none"
+      aria-label="도시 야경과 도심 속 공원 사진"
+      className="relative mx-auto h-[25rem] w-full max-w-[35rem] overflow-hidden rounded-[1.65rem] border border-white/45 bg-[#07110f] shadow-[0_34px_84px_rgba(8,19,21,0.2)] sm:h-[35rem] sm:rounded-[2rem] lg:h-[44rem] lg:max-w-none"
     >
-      <div className="absolute inset-x-[8%] bottom-4 h-24 rounded-[50%] bg-[#081315]/20 blur-2xl" />
-      <Image
-        src="/hero-night-city.svg"
-        alt="아파트가 있는 도시 야경"
-        fill
-        priority
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 42rem, 50vw"
-        className="object-contain object-bottom drop-shadow-[0_34px_70px_rgba(8,19,21,0.22)]"
-      />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/84 to-transparent" />
+      {heroPhotos.map((photo, index) => (
+        <Image
+          key={photo.src}
+          src={photo.src}
+          alt={photo.alt}
+          fill
+          priority={index === 0}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 42rem, 50vw"
+          className={`hero-rotator-slide object-cover object-center ${
+            index === 0 ? "hero-rotator-slide-primary" : "hero-rotator-slide-secondary"
+          }`}
+        />
+      ))}
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,17,15,0.08)_0%,rgba(7,17,15,0)_42%,rgba(7,17,15,0.5)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/68 to-transparent" />
+      <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-full border border-white/22 bg-[#07110f]/48 px-4 py-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-md">
+        <span className="text-xs font-medium text-white/78">오늘의 동네 흐름</span>
+        <span className="h-2 w-2 rounded-full bg-[#d6e85c] shadow-[0_0_18px_rgba(214,232,92,0.85)]" />
+      </div>
     </div>
   );
 }
@@ -77,7 +97,7 @@ export function HomeSignalBoard({
           </div>
 
           <div className="sm:hidden">
-            <NightCityVisual />
+            <HeroPhotoRotator />
           </div>
 
           <div className="grid max-w-xl gap-3 border-t border-[#11140f]/12 pt-4">
@@ -91,7 +111,7 @@ export function HomeSignalBoard({
         </div>
 
         <div className="hidden sm:block">
-          <NightCityVisual />
+          <HeroPhotoRotator />
         </div>
       </div>
     </section>

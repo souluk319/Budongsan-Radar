@@ -109,3 +109,45 @@ select {
   -webkit-line-clamp: 3;
   overflow: hidden;
 }
+
+.hero-rotator-slide {
+  opacity: 0;
+  animation: hero-photo-rotate 12s ease-in-out infinite;
+}
+
+.hero-rotator-slide-primary {
+  opacity: 1;
+}
+
+.hero-rotator-slide-secondary {
+  animation-delay: -6s;
+}
+
+@keyframes hero-photo-rotate {
+  0%,
+  41% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50%,
+  91% {
+    opacity: 0;
+    transform: scale(1.035);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rotator-slide {
+    animation: none;
+  }
+
+  .hero-rotator-slide-secondary {
+    opacity: 0;
+  }
+}
