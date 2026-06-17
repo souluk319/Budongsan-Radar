@@ -83,7 +83,7 @@ export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
           type="button"
           disabled={pending === "vote"}
           onClick={() => mutate("vote")}
-          className="h-9 rounded-md border border-[#e5dac8] bg-white px-3 text-sm font-bold text-[#2b2520] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-full border border-[#cbd6d8] bg-white px-3 text-sm font-semibold text-[#11140f] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {recommended ? "추천됨" : compact ? "추천" : "추천"}
         </button>
@@ -91,11 +91,11 @@ export function ActionButtons({ linkId, compact = false }: ActionButtonsProps) {
           type="button"
           disabled={pending === "save"}
           onClick={() => mutate("save")}
-          className="h-9 rounded-md border border-[#e5dac8] bg-white px-3 text-sm font-bold text-[#2b2520] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-full border border-[#cbd6d8] bg-white px-3 text-sm font-semibold text-[#11140f] transition hover:border-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {saved ? "저장됨" : compact ? "저장" : "저장"}
         </button>
-        <span className="text-xs font-semibold text-[#7a7064]">
+        <span className="text-xs font-semibold text-[#667174]">
           로그인하면 저장돼요
         </span>
       </div>

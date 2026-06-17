@@ -24,12 +24,12 @@ export function RssIngestButton() {
           setPending(false);
           router.refresh();
         }}
-        className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "수집 중" : "RSS 수집 실행"}
       </button>
       {message ? (
-        <p className="text-sm font-semibold text-[#6b6254]">{message}</p>
+        <p className="text-sm font-semibold text-[#667174]">{message}</p>
       ) : null}
     </div>
   );

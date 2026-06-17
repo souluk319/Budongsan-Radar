@@ -41,45 +41,45 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
     return (
       <section className="grid gap-5">
         <div>
-          <p className="text-sm font-black text-[#d97706]">링크 정보</p>
-          <h3 className="mt-1 text-xl font-black leading-snug text-[#14110f]">
+          <p className="text-sm font-semibold text-[#11140f]">링크 정보</p>
+          <h3 className="mt-1 text-xl font-semibold leading-snug text-[#14110f]">
             좋은 링크 하나면 오늘 브리프가 더 좋아집니다
           </h3>
         </div>
 
-        <div className="rounded-md border border-[#eadfce] bg-[#fffaf2] p-4 text-sm font-semibold leading-6 text-[#6b6254]">
+        <div className="rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] p-4 text-sm font-normal leading-6 text-[#667174]">
           {isConfigured
             ? "제보는 로그인 후 보낼 수 있습니다. 보내주신 링크는 집집이 확인한 뒤 브리프 후보로 올립니다."
             : "계정 기능을 준비 중입니다. 지금은 브리프를 먼저 둘러볼 수 있습니다."}
           {isConfigured ? (
             <Link
               href="/login?next=/submit"
-              className="mt-3 inline-flex h-9 items-center rounded-md bg-[#14110f] px-3 text-sm font-black text-white hover:bg-[#342b23]"
+              className="mt-3 inline-flex h-9 items-center rounded-full bg-[#11140f] px-4 text-sm font-semibold text-white hover:bg-[#2a2d2f]"
             >
               로그인 후 제보하기
             </Link>
           ) : null}
         </div>
 
-        <div className="grid gap-3 rounded-md border border-[#eadfce] bg-white p-4">
-          <p className="text-sm font-black text-[#14110f]">제보에 필요한 것</p>
-          <div className="divide-y divide-[#eee4d5] text-sm font-semibold leading-6 text-[#51483d]">
+        <div className="grid gap-3 rounded-xl border border-[#cbd6d8] bg-white/70 p-4">
+          <p className="text-sm font-semibold text-[#14110f]">제보에 필요한 것</p>
+          <div className="divide-y divide-[#dfe8ea] text-sm font-normal leading-6 text-[#4f5a5d]">
             <div className="grid gap-1 py-3 sm:grid-cols-[8rem_minmax(0,1fr)]">
-              <span className="font-black text-[#2b2520]">원문 URL</span>
+              <span className="font-semibold text-[#11140f]">원문 URL</span>
               <span>출처를 확인할 수 있는 기사, 공지, 리포트 링크</span>
             </div>
             <div className="grid gap-1 py-3 sm:grid-cols-[8rem_minmax(0,1fr)]">
-              <span className="font-black text-[#2b2520]">제목</span>
+              <span className="font-semibold text-[#11140f]">제목</span>
               <span>무슨 이슈인지 한눈에 보이는 짧은 제목</span>
             </div>
             <div className="grid gap-1 py-3 sm:grid-cols-[8rem_minmax(0,1fr)]">
-              <span className="font-black text-[#2b2520]">분류</span>
+              <span className="font-semibold text-[#11140f]">분류</span>
               <span>정책, 전세, 청약, 지역처럼 영향을 볼 기준</span>
             </div>
           </div>
         </div>
 
-        <div className="rounded-md border border-[#eadfce] bg-[#fffaf2] p-4 text-sm font-semibold leading-6 text-[#6b6254]">
+        <div className="rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] p-4 text-sm font-normal leading-6 text-[#667174]">
           제보한 링크는 바로 공개되지 않습니다. 집집이 출처와 맥락을 확인한 뒤
           브리프에 반영합니다.
         </div>
@@ -133,14 +133,14 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
       }}
     >
       <div>
-        <p className="text-sm font-black text-[#d97706]">링크 정보</p>
-        <h3 className="mt-1 text-xl font-black leading-snug text-[#14110f]">
+        <p className="text-sm font-semibold text-[#11140f]">링크 정보</p>
+        <h3 className="mt-1 text-xl font-semibold leading-snug text-[#14110f]">
           좋은 링크 하나면 오늘 브리프가 더 좋아집니다
         </h3>
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-black text-[#14110f]" htmlFor="url">
+        <label className="text-sm font-semibold text-[#14110f]" htmlFor="url">
           원문 URL
         </label>
         <input
@@ -149,12 +149,12 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
           name="url"
           type="url"
           placeholder="https://news.example.com/article"
-          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition placeholder:text-[#9a9288] focus:border-[#14110f] focus:bg-white"
+          className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition placeholder:text-[#8a9698] focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-black text-[#14110f]" htmlFor="title">
+        <label className="text-sm font-semibold text-[#14110f]" htmlFor="title">
           제목
         </label>
         <input
@@ -163,14 +163,14 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
           name="title"
           type="text"
           placeholder="예: 전세대출 금리 변화가 세입자에게 주는 영향"
-          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition placeholder:text-[#9a9288] focus:border-[#14110f] focus:bg-white"
+          className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition placeholder:text-[#8a9698] focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
           <label
-            className="text-sm font-black text-[#14110f]"
+            className="text-sm font-semibold text-[#14110f]"
             htmlFor="category"
           >
             카테고리
@@ -178,7 +178,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
           <select
             id="category"
             name="category"
-            className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
+            className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
             defaultValue="정책"
           >
             {categories.map((category) => (
@@ -191,7 +191,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
 
         <div className="grid gap-2">
           <label
-            className="text-sm font-black text-[#14110f]"
+            className="text-sm font-semibold text-[#14110f]"
             htmlFor="region"
           >
             지역
@@ -199,7 +199,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
           <select
             id="region"
             name="region"
-            className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
+            className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
             defaultValue="전국"
           >
             {regions.map((region) => (
@@ -215,7 +215,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
         <button
           type="submit"
           disabled={pending}
-          className="h-11 rounded-md bg-[#14110f] px-4 text-sm font-black text-white transition hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-11 rounded-full bg-[#11140f] px-5 text-sm font-semibold text-white transition hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "보내는 중" : "브리프에 제보하기"}
         </button>
@@ -232,7 +232,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
         ) : null}
       </div>
 
-      <div className="rounded-md border border-[#eadfce] bg-[#fffaf2] p-4 text-sm font-semibold leading-6 text-[#6b6254]">
+      <div className="rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] p-4 text-sm font-normal leading-6 text-[#667174]">
         제보한 링크는 바로 공개되지 않습니다. 집집이 출처와 맥락을 확인한 뒤
         브리프에 반영합니다.
       </div>

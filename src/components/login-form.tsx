@@ -87,20 +87,20 @@ export function LoginForm({ nextPath }: LoginFormProps) {
   return (
     <form action={submit} className="grid gap-5">
       <div>
-        <p className="text-sm font-black text-[#d97706]">이메일로 로그인</p>
-        <h3 className="mt-1 text-xl font-black leading-snug text-[#14110f]">
+        <p className="text-sm font-semibold text-[#11140f]">이메일로 로그인</p>
+        <h3 className="mt-1 text-xl font-semibold leading-snug text-[#14110f]">
           집집 브리프를 내 계정에 이어둡니다
         </h3>
       </div>
 
-      <div className="inline-grid grid-cols-2 rounded-md border border-[#eadfce] bg-[#fff8ec] p-1">
+      <div className="inline-grid grid-cols-2 rounded-full border border-[#cbd6d8] bg-[#f8fbfb] p-1">
         <button
           type="button"
           onClick={() => setMode("sign-in")}
-          className={`h-9 rounded px-3 text-sm font-semibold ${
+          className={`h-9 rounded-full px-3 text-sm font-semibold ${
             mode === "sign-in"
               ? "bg-white text-[#14110f]"
-              : "text-[#7a7064]"
+              : "text-[#667174]"
           }`}
         >
           로그인
@@ -108,10 +108,10 @@ export function LoginForm({ nextPath }: LoginFormProps) {
         <button
           type="button"
           onClick={() => setMode("sign-up")}
-          className={`h-9 rounded px-3 text-sm font-semibold ${
+          className={`h-9 rounded-full px-3 text-sm font-semibold ${
             mode === "sign-up"
               ? "bg-white text-[#14110f]"
-              : "text-[#7a7064]"
+              : "text-[#667174]"
           }`}
         >
           가입
@@ -119,7 +119,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
       </div>
 
       <div className="grid gap-2">
-        <label className="text-sm font-black text-[#14110f]" htmlFor="email">
+        <label className="text-sm font-semibold text-[#14110f]" htmlFor="email">
           이메일
         </label>
         <input
@@ -129,13 +129,13 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           type="email"
           autoComplete="email"
           placeholder="name@example.com"
-          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
+          className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <div className="grid gap-2">
         <label
-          className="text-sm font-black text-[#14110f]"
+          className="text-sm font-semibold text-[#14110f]"
           htmlFor="password"
         >
           비밀번호
@@ -148,14 +148,14 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           minLength={6}
           autoComplete={mode === "sign-in" ? "current-password" : "new-password"}
           placeholder="6자 이상"
-          className="h-11 rounded-md border border-[#d9cdbc] bg-[#fffdf8] px-3 text-sm font-semibold text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
+          className="h-11 rounded-xl border border-[#cbd6d8] bg-[#f8fbfb] px-3 text-sm font-normal text-[#14110f] outline-none transition focus:border-[#14110f] focus:bg-white"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="h-11 rounded-md bg-[#14110f] px-4 text-sm font-black text-white transition hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+        className="h-11 rounded-full bg-[#11140f] px-5 text-sm font-semibold text-white transition hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "처리 중" : mode === "sign-in" ? "브리프 이어보기" : "계정 만들기"}
       </button>

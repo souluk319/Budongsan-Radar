@@ -36,24 +36,24 @@ export function IssueBriefList({ links }: IssueBriefListProps) {
       <section className="grid gap-3">
         <div className="flex flex-wrap items-end justify-between gap-3 border-b border-[#11140f] pb-3">
           <div>
-            <p className="text-sm font-black text-[#14110f]">오늘 볼 이슈</p>
-            <h2 className="mt-1 text-2xl font-black leading-tight text-[#14110f]">
+            <p className="text-sm font-semibold text-[#14110f]">오늘 볼 이슈</p>
+            <h2 className="mt-1 text-2xl font-extrabold leading-tight text-[#14110f]">
               아직 맞는 이슈가 없습니다
             </h2>
           </div>
         </div>
 
-        <div className="rounded-md border border-[#cbd3d5] bg-white p-5">
-          <p className="text-base font-black text-[#14110f]">
+        <div className="rounded-xl border border-[#cbd3d5] bg-white/70 p-5 shadow-[0_18px_44px_rgba(26,38,42,0.08)] backdrop-blur">
+          <p className="text-base font-semibold text-[#14110f]">
             조건을 조금 넓히면 오늘 브리프를 더 볼 수 있어요.
           </p>
-          <p className="mt-2 text-sm font-semibold leading-6 text-[#4d575a]">
+          <p className="mt-2 text-sm font-normal leading-6 text-[#4d575a]">
             지역이나 카테고리를 하나만 선택하거나, 전체 브리프에서 먼저
             흐름을 잡아보세요.
           </p>
           <Link
             href="/"
-            className="mt-4 inline-flex h-9 items-center rounded-full bg-[#11140f] px-4 text-sm font-black text-white hover:bg-[#2a2d2f]"
+            className="mt-4 inline-flex h-9 items-center rounded-full bg-[#11140f] px-4 text-sm font-semibold text-white hover:bg-[#2a2d2f]"
           >
             전체 보기
           </Link>
@@ -128,7 +128,7 @@ export function IssueBriefList({ links }: IssueBriefListProps) {
               </div>
 
               <div className="flex flex-wrap gap-2 text-xs font-medium text-[#667174] sm:grid sm:content-start sm:justify-items-end sm:text-right">
-                <span className="rounded-full bg-[#eef3f4] px-2.5 py-1 font-semibold text-[#11140f]">
+                <span className="rounded-full bg-[#f8fbfb] px-2.5 py-1 font-semibold text-[#11140f]">
                   신호 {link.score}
                 </span>
                 <span>{link.sourceName}</span>

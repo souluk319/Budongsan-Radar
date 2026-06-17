@@ -45,11 +45,11 @@ export function DailyBriefLead({ model, liveLinkCount }: DailyBriefLeadProps) {
 
   return (
     <section className="grid gap-2.5">
-      <div className="flex flex-wrap items-center gap-2 text-xs font-black text-[#6b6254] sm:text-sm">
-        <span className="text-[#d97706]">근거 있는 브리프</span>
-        <span className="h-1 w-1 rounded-full bg-[#d97706]" aria-hidden />
+      <div className="flex flex-wrap items-center gap-2 text-xs font-black text-[#667174] sm:text-sm">
+        <span className="text-[#11140f]">근거 있는 브리프</span>
+        <span className="h-1 w-1 rounded-full bg-[#11140f]" aria-hidden />
         <span>{model.dateLabel} 브리프</span>
-        <span className="h-1 w-1 rounded-full bg-[#d97706]" aria-hidden />
+        <span className="h-1 w-1 rounded-full bg-[#11140f]" aria-hidden />
         <span>{sourceCountLabel}</span>
       </div>
 
@@ -57,19 +57,19 @@ export function DailyBriefLead({ model, liveLinkCount }: DailyBriefLeadProps) {
         <h1 className="max-w-3xl text-[1.72rem] font-black leading-[1.08] text-[#14110f] min-[390px]:text-[1.85rem] sm:text-5xl lg:text-[3.1rem] [word-break:keep-all]">
           {headline}
         </h1>
-        <p className="max-w-2xl text-[0.92rem] font-bold leading-6 text-[#51483d] sm:text-lg sm:leading-8">
+        <p className="max-w-2xl text-[0.92rem] font-bold leading-6 text-[#4f5a5d] sm:text-lg sm:leading-8">
           {model.briefSummary}
         </p>
       </div>
 
       <div className="filter-scroll flex gap-2 overflow-x-auto">
-        <span className="shrink-0 rounded-sm bg-white px-2.5 py-1 text-xs font-black text-[#5e554b]">
+        <span className="shrink-0 rounded-sm bg-white px-2.5 py-1 text-xs font-black text-[#4f5a5d]">
           {evidenceLabel}
         </span>
         {model.keywords.map((keyword) => (
           <span
             key={keyword}
-            className="shrink-0 rounded-sm border border-[#d6c6b2] bg-white px-2.5 py-1 text-xs font-black text-[#5e554b]"
+            className="shrink-0 rounded-sm border border-[#d6c6b2] bg-white px-2.5 py-1 text-xs font-black text-[#4f5a5d]"
           >
             {keyword}
           </span>

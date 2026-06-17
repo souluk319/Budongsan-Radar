@@ -176,7 +176,8 @@ async function main() {
     assertIncludes(home, "집값을", "home");
     assertIncludes(home, "먼저 읽다", "home");
     assertIncludes(home, "시작하기", "home");
-    assertIncludes(home, "Home Signal Board", "home");
+    assertIncludes(home, "도시 야경과 아파트 스카이라인", "home");
+    assertIncludes(home, "아파트가 있는 도시 야경", "home");
     assertIncludes(home, "실제 수집", "home");
     assertIncludes(home, "근거", "home");
     assertIncludes(home, "주의", "home");

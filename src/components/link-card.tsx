@@ -11,11 +11,11 @@ type LinkCardProps = {
 
 export function LinkCard({ link, rank }: LinkCardProps) {
   return (
-    <article className="border-b border-[#e3d8c8] py-4 transition hover:bg-white/55">
+    <article className="border-b border-[#cbd6d8] py-4 transition hover:bg-white/55">
       <div className="min-w-0">
         <div className="mb-2 flex flex-wrap items-center gap-1.5">
           {typeof rank === "number" ? (
-            <span className="font-mono text-xs font-black text-[#9a4f00]">
+            <span className="font-mono text-xs font-semibold text-[#11140f]">
               #{rank}
             </span>
           ) : null}
@@ -33,15 +33,15 @@ export function LinkCard({ link, rank }: LinkCardProps) {
           href={`/links/${link.id}`}
           className="group block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-[#14110f]"
         >
-          <h2 className="text-base font-black leading-snug text-[#14110f] group-hover:underline sm:text-lg [word-break:keep-all]">
+          <h2 className="text-base font-semibold leading-snug text-[#14110f] group-hover:text-[#000000] sm:text-lg [word-break:keep-all]">
             {link.title}
           </h2>
-          <p className="mt-1 line-clamp-2 text-sm font-semibold leading-6 text-[#51483d]">
+          <p className="mt-1 line-clamp-2 text-sm font-normal leading-6 text-[#4f5a5d]">
             {link.impactLine}
           </p>
         </Link>
 
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-semibold text-[#7a7064]">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-[#667174]">
           <span>{link.sourceName}</span>
           <span>{formatKoreanDate(link.submittedAt)}</span>
           <span>{link.readingMinutes}분 읽기</span>

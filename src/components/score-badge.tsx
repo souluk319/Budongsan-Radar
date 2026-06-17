@@ -7,14 +7,14 @@ export function ScoreBadge({ score, compact = false }: ScoreBadgeProps) {
   const label = score >= 86 ? "높음" : score >= 75 ? "보통" : "낮음";
   const tone =
     score >= 86
-      ? "border-[#f4b98b] bg-[#fff4ea] text-[#9a4f00]"
+      ? "border-[#d6e85c] bg-[#f7ffd8] text-[#11140f]"
       : score >= 75
-        ? "border-[#b7d7ff] bg-[#eef6ff] text-[#155ca8]"
-        : "border-[#e5dac8] bg-white text-[#5e554b]";
+        ? "border-[#b8c8cc] bg-[#f8fbfb] text-[#263235]"
+        : "border-[#cbd6d8] bg-white/75 text-[#4f5a5d]";
 
   return (
     <span
-      className={`inline-flex h-7 items-center justify-center rounded-sm border px-2 text-xs font-black ${tone}`}
+      className={`inline-flex h-7 items-center justify-center rounded-full border px-2.5 text-xs font-semibold ${tone}`}
       aria-label={`중요도 ${score}점`}
       title={`내부 중요도 ${score}점`}
     >

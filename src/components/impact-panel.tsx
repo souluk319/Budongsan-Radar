@@ -28,14 +28,14 @@ const impactItems: Array<{
 
 export function ImpactPanel({ impact }: ImpactPanelProps) {
   return (
-    <div className="divide-y divide-[#e3d8c8] border-y border-[#d8cdbc]">
+    <div className="divide-y divide-[#cbd6d8] border-y border-[#cbd6d8]">
       {impactItems.map((item) => (
         <section
           key={item.key}
           className="grid gap-1 py-3 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-4"
         >
-          <h3 className="text-sm font-black text-[#14110f]">{item.label}</h3>
-          <p className="text-sm font-semibold leading-6 text-[#51483d]">
+          <h3 className="text-sm font-semibold text-[#14110f]">{item.label}</h3>
+          <p className="text-sm font-normal leading-6 text-[#4f5a5d]">
             {impact[item.key]}
           </p>
         </section>

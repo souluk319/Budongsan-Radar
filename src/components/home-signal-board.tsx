@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { HomeSignalModel } from "@/lib/home-signals";
 
 type HomeSignalBoardProps = {
@@ -6,58 +7,22 @@ type HomeSignalBoardProps = {
   liveLinkCount: number;
 };
 
-function MetallicSignalSculpture() {
-  const bars = [
-    { height: 142, left: "7%", bottom: 0, width: "10%" },
-    { height: 86, left: "16%", bottom: 0, width: "8%" },
-    { height: 238, left: "27%", bottom: 0, width: "12%" },
-    { height: 166, left: "37%", bottom: 0, width: "9%" },
-    { height: 318, left: "49%", bottom: 0, width: "13%" },
-    { height: 154, left: "60%", bottom: 0, width: "9%" },
-    { height: 276, left: "70%", bottom: 0, width: "12%" },
-    { height: 198, left: "82%", bottom: 0, width: "11%" },
-  ];
-
+function NightCityVisual() {
   return (
     <div
-      aria-label="Home Signal Board"
-      className="relative mx-auto h-[22rem] w-full max-w-[36rem] overflow-hidden sm:h-[35rem] lg:h-[44rem] lg:max-w-none"
+      aria-label="도시 야경과 아파트 스카이라인"
+      className="relative mx-auto h-[23rem] w-full max-w-[35rem] overflow-hidden sm:h-[35rem] lg:h-[44rem] lg:max-w-none"
     >
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/84 to-transparent" />
-      <div className="absolute inset-x-[8%] bottom-3 h-20 rounded-[50%] bg-[#1d292c]/18 blur-2xl" />
-      <div className="absolute bottom-0 right-0 h-[20rem] w-[90%] sm:h-[34rem] lg:h-[40rem]" aria-hidden>
-        {bars.map((bar, index) => (
-          <div
-            key={`${bar.left}-${bar.height}`}
-            className="absolute"
-            style={{
-              bottom: bar.bottom,
-              height: bar.height,
-              left: bar.left,
-              width: bar.width,
-              zIndex: index,
-            }}
-          >
-            <div className="relative h-full w-full">
-              <div
-                className={[
-                  "absolute inset-0 rounded-[5px] border border-white/55",
-                  "bg-[linear-gradient(105deg,#fbfdfd_0%,#dce4e3_24%,#8b9896_42%,#f8fbfb_58%,#b9c4c3_76%,#4b5658_100%)]",
-                  "shadow-[0_32px_80px_rgba(20,28,30,0.16)]",
-                ].join(" ")}
-              />
-              <div className="absolute -top-5 left-0 h-5 w-full skew-x-[34deg] border border-white/60 bg-[linear-gradient(135deg,#ffffff,#e9eff0_55%,#8a9698)]" />
-              <div className="absolute -right-4 -top-2 h-full w-4 skew-y-[28deg] border border-white/45 bg-[linear-gradient(90deg,#738083,#f9fbfb_58%,#9aa5a7)]" />
-              <div className="absolute inset-x-[20%] top-6 h-[70%] bg-white/26 blur-md" />
-              <div
-                className="absolute inset-y-0 left-[18%] w-px bg-white/75"
-                aria-hidden
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-      <span className="sr-only">Home Signal Board</span>
+      <div className="absolute inset-x-[8%] bottom-4 h-24 rounded-[50%] bg-[#081315]/20 blur-2xl" />
+      <Image
+        src="/hero-night-city.svg"
+        alt="아파트가 있는 도시 야경"
+        fill
+        priority
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 42rem, 50vw"
+        className="object-contain object-bottom drop-shadow-[0_34px_70px_rgba(8,19,21,0.22)]"
+      />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/84 to-transparent" />
     </div>
   );
 }
@@ -112,7 +77,7 @@ export function HomeSignalBoard({
           </div>
 
           <div className="sm:hidden">
-            <MetallicSignalSculpture />
+            <NightCityVisual />
           </div>
 
           <div className="grid max-w-xl gap-3 border-t border-[#11140f]/12 pt-4">
@@ -126,7 +91,7 @@ export function HomeSignalBoard({
         </div>
 
         <div className="hidden sm:block">
-          <MetallicSignalSculpture />
+          <NightCityVisual />
         </div>
       </div>
     </section>

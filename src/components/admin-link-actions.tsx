@@ -79,7 +79,7 @@ export function AdminLinkActions({
             ? `근거 ${evidenceCount}개`
             : "공식 근거 없음"}
         </span>
-        <span className="rounded-sm border border-[#eadfce] bg-white px-2 py-1 text-[#7a7064]">
+        <span className="rounded-sm border border-[#cbd6d8] bg-white px-2 py-1 text-[#667174]">
           근거 → 요약 → 승인
         </span>
       </div>
@@ -89,7 +89,7 @@ export function AdminLinkActions({
           type="button"
           disabled={pending !== null}
           onClick={() => run("evidence")}
-          className="h-9 rounded-md border border-[#f1c27d] bg-[#fff8ec] px-3 text-sm font-black text-[#9a4f00] hover:border-[#d97706] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-md border border-[#f1c27d] bg-[#f8fbfb] px-3 text-sm font-black text-[#11140f] hover:border-[#11140f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending === "evidence" ? "수집 중" : "근거 수집"}
         </button>
@@ -97,7 +97,7 @@ export function AdminLinkActions({
           type="button"
           disabled={pending !== null}
           onClick={() => run("summary")}
-          className="h-9 rounded-md border border-[#d9cdbc] bg-white px-3 text-sm font-bold text-[#5e554b] hover:border-[#14110f] hover:text-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-md border border-[#cbd6d8] bg-white px-3 text-sm font-bold text-[#4f5a5d] hover:border-[#14110f] hover:text-[#14110f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           요약
         </button>
@@ -105,7 +105,7 @@ export function AdminLinkActions({
           type="button"
           disabled={pending !== null}
           onClick={() => run("publish")}
-          className="h-9 rounded-md bg-[#14110f] px-3 text-sm font-black text-white hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-9 rounded-md bg-[#14110f] px-3 text-sm font-black text-white hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           승인
         </button>
@@ -120,7 +120,7 @@ export function AdminLinkActions({
       </div>
 
       {message ? (
-        <p className="text-xs font-semibold text-[#6b6254]">{message}</p>
+        <p className="text-xs font-semibold text-[#667174]">{message}</p>
       ) : null}
     </div>
   );

@@ -40,7 +40,7 @@ export function NaverNewsIngestButton() {
         <input
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          className="h-10 rounded-md border border-[#d9cdbc] bg-white px-3 text-sm font-semibold text-[#14110f] outline-none focus:border-[#14110f]"
+          className="h-10 rounded-md border border-[#cbd6d8] bg-white px-3 text-sm font-semibold text-[#14110f] outline-none focus:border-[#14110f]"
         />
       </label>
       <div className="flex flex-wrap items-center gap-3">
@@ -48,12 +48,12 @@ export function NaverNewsIngestButton() {
           type="button"
           disabled={pending || query.trim().length === 0}
           onClick={ingest}
-          className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "수집 중" : "네이버 후보 수집"}
         </button>
         {message ? (
-          <p className="text-sm font-semibold text-[#6b6254]">{message}</p>
+          <p className="text-sm font-semibold text-[#667174]">{message}</p>
         ) : null}
       </div>
     </div>

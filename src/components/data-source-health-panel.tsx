@@ -60,10 +60,10 @@ export function DataSourceHealthPanel() {
   }
 
   return (
-    <section className="grid gap-4 rounded-md border border-[#eadfce] bg-white p-5">
+    <section className="grid gap-4 rounded-md border border-[#cbd6d8] bg-white p-5">
       <div className="grid gap-1">
         <h3 className="text-lg font-black text-[#14110f]">데이터 연결 점검</h3>
-        <p className="text-sm font-semibold leading-6 text-[#6b6254]">
+        <p className="text-sm font-semibold leading-6 text-[#667174]">
           공공데이터, R-ONE, ECOS, 네이버, 법령 API가 실제로 응답하는지
           확인합니다. 값은 화면에 노출하지 않습니다.
         </p>
@@ -74,17 +74,17 @@ export function DataSourceHealthPanel() {
           type="button"
           disabled={pending}
           onClick={check}
-          className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#342b23] disabled:cursor-not-allowed disabled:opacity-60"
+          className="h-10 rounded-md bg-[#14110f] px-4 text-sm font-black text-white hover:bg-[#2a2d2f] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending ? "확인 중" : "연결 점검"}
         </button>
         {message ? (
-          <p className="text-sm font-semibold text-[#6b6254]">{message}</p>
+          <p className="text-sm font-semibold text-[#667174]">{message}</p>
         ) : null}
       </div>
 
       {sources.length > 0 ? (
-        <div className="divide-y divide-[#eee4d5] border-y border-[#eee4d5]">
+        <div className="divide-y divide-[#dfe8ea] border-y border-[#dfe8ea]">
           {sources.map((source) => (
             <div
               key={source.id}
@@ -98,10 +98,10 @@ export function DataSourceHealthPanel() {
               >
                 {statusLabel[source.status]}
               </span>
-              <p className="text-sm font-semibold leading-6 text-[#6b6254]">
+              <p className="text-sm font-semibold leading-6 text-[#667174]">
                 {source.message}
                 {typeof source.latencyMs === "number" ? (
-                  <span className="ml-2 text-xs text-[#8a8176]">
+                  <span className="ml-2 text-xs text-[#667174]">
                     {source.latencyMs}ms
                   </span>
                 ) : null}

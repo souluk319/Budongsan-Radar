@@ -17,26 +17,28 @@ export default async function BriefingPage() {
   return (
     <>
       <SiteHeader />
-      <main className="flex-1 bg-[#f7f5ef]">
-        <section className="mx-auto w-full max-w-5xl px-4 pb-5 pt-5 sm:px-6 sm:pb-7 sm:pt-8 lg:px-8">
+      <main className="flex-1 bg-[#eef3f4]">
+        <section className="border-b border-[#cbd6d8] bg-[#e9f0f2]">
+          <div className="mx-auto w-full max-w-5xl px-4 pb-7 pt-6 sm:px-6 sm:pb-9 sm:pt-10 lg:px-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-black text-[#d97706]">
+            <p className="text-sm font-semibold text-[#11140f]">
               집집 브리프
             </p>
-            <h1 className="mt-2 text-[1.85rem] font-black leading-tight text-[#14110f] sm:text-4xl [word-break:keep-all]">
+            <h1 className="mt-2 text-[1.85rem] font-extrabold leading-tight text-[#14110f] sm:text-4xl [word-break:keep-all]">
               오늘 볼 부동산 이슈만 모았습니다
             </h1>
-            <p className="mt-3 max-w-2xl text-base font-semibold leading-7 text-[#51483d]">
+            <p className="mt-3 max-w-2xl text-base font-normal leading-7 text-[#4f5a5d]">
               꼭 볼 것부터 가볍게 넘길 것까지, 내 결정에 닿는 흐름만 짧게 봅니다.
             </p>
           </div>
+          </div>
         </section>
 
-        <section className="mx-auto grid w-full max-w-5xl items-start gap-4 px-4 pb-10 sm:px-6 lg:grid-cols-[minmax(0,1fr)_17rem] lg:px-8">
+        <section className="mx-auto grid w-full max-w-5xl items-start gap-4 px-4 pb-12 pt-6 sm:px-6 sm:pt-8 lg:grid-cols-[minmax(0,1fr)_17rem] lg:px-8">
           <DailyBriefingList links={links} showSummary />
-          <aside className="hidden self-start rounded-md border border-[#eadfce] bg-white p-4 lg:grid">
-            <p className="text-sm font-black text-[#14110f]">읽는 순서</p>
-            <div className="mt-3 grid gap-3 text-sm font-semibold leading-6 text-[#51483d]">
+          <aside className="hidden self-start rounded-xl border border-[#cbd6d8] bg-white/70 p-4 shadow-[0_18px_44px_rgba(26,38,42,0.08)] backdrop-blur lg:grid">
+            <p className="text-sm font-semibold text-[#14110f]">읽는 순서</p>
+            <div className="mt-3 grid gap-3 text-sm font-normal leading-6 text-[#4f5a5d]">
               <p>1. 맨 위 이슈부터 오늘 분위기를 잡습니다.</p>
               <p>2. 제목 아래 한 줄만 읽어도 흐름이 보이게 정리했습니다.</p>
               <p>3. 더 필요하면 상세에서 근거와 체크포인트를 확인합니다.</p>
