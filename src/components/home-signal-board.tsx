@@ -34,11 +34,11 @@ const heroPhotos = [
   },
 ];
 
-function HeroPhotoRotator() {
+function HeroPhotoBackdrop() {
   return (
     <div
       aria-label="도시 야경과 도심 속 공원 사진"
-      className="relative mx-auto h-[25rem] w-full max-w-[35rem] overflow-hidden rounded-[1.65rem] border border-white/45 bg-[#07110f] shadow-[0_34px_84px_rgba(8,19,21,0.2)] sm:h-[35rem] sm:rounded-[2rem] lg:h-[44rem] lg:max-w-none"
+      className="absolute inset-0 overflow-hidden bg-[#07110f]"
     >
       {heroPhotos.map((photo, index) => (
         <Image
@@ -54,12 +54,9 @@ function HeroPhotoRotator() {
           }`}
         />
       ))}
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,17,15,0.08)_0%,rgba(7,17,15,0)_42%,rgba(7,17,15,0.5)_100%)]" />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/68 to-transparent" />
-      <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-full border border-white/22 bg-[#07110f]/48 px-4 py-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-md">
-        <span className="text-xs font-medium text-white/78">오늘의 동네 흐름</span>
-        <span className="h-2 w-2 rounded-full bg-[#d6e85c] shadow-[0_0_18px_rgba(214,232,92,0.85)]" />
-      </div>
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,5,5,0.74)_0%,rgba(5,5,5,0.48)_38%,rgba(5,5,5,0.08)_74%,rgba(5,5,5,0.18)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.42)_0%,rgba(5,5,5,0)_34%,rgba(5,5,5,0.58)_100%)]" />
+      <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#eef3f4] via-[#eef3f4]/42 to-transparent" />
     </div>
   );
 }
@@ -76,59 +73,58 @@ export function HomeSignalBoard({
   const evidenceLabel = evidenceCount > 0 ? `근거 ${evidenceCount}개` : "근거 확인 중";
 
   return (
-    <section className="overflow-hidden border-b border-[#11140f]/10 bg-[#e9f0f2] bg-[linear-gradient(180deg,#e8eff1_0%,#eef3f4_100%)]">
-      <div className="mx-auto grid w-full max-w-7xl gap-7 px-4 py-9 sm:gap-8 sm:px-6 sm:py-16 lg:min-h-[calc(100svh-8rem)] lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:px-8 lg:py-16">
-        <div className="grid min-w-0 gap-5 sm:gap-7">
-          <p className="text-sm font-medium text-[#11140f] sm:text-base">
+    <section className="relative isolate min-h-[calc(100svh-3.5rem)] overflow-hidden border-b border-[#11140f]/10 bg-[#07110f] text-white sm:min-h-[calc(100svh-4rem)]">
+      <HeroPhotoBackdrop />
+      <div className="relative z-10 mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-7xl flex-col justify-end px-4 pb-8 pt-24 sm:min-h-[calc(100svh-4rem)] sm:px-6 sm:pb-12 sm:pt-28 lg:px-8 lg:pb-16">
+        <div className="grid max-w-[48rem] gap-5 sm:gap-7">
+          <p className="text-sm font-medium text-white/82 sm:text-base">
             집집 부동산 브리프
           </p>
 
           <div className="grid gap-5">
-            <h1 className="max-w-[39rem] text-[3.05rem] font-extrabold leading-[0.98] text-[#11140f] min-[390px]:text-[3.28rem] sm:text-[5rem] sm:leading-[0.96] lg:text-[5.55rem] [word-break:keep-all]">
+            <h1 className="max-w-[46rem] text-[3.28rem] font-extrabold leading-[0.96] text-white min-[390px]:text-[3.62rem] sm:text-[5.8rem] sm:leading-[0.9] lg:text-[7.1rem] [word-break:keep-all]">
               집값을
               <br />
               먼저 읽다.
             </h1>
-            <p className="hidden max-w-xl text-base font-normal leading-7 text-[#11140f] sm:block sm:text-[1.42rem] sm:leading-9 [word-break:keep-all]">
+            <p className="hidden max-w-2xl text-base font-normal leading-7 text-white/86 sm:block sm:text-[1.42rem] sm:leading-9 [word-break:keep-all]">
               흩어진 뉴스와 시장 데이터를 모아 오늘의 부동산 신호를 한눈에 보여줍니다.
             </p>
           </div>
 
-          <p className="max-w-xl text-base font-normal leading-7 text-[#11140f] sm:hidden [word-break:keep-all]">
+          <p className="max-w-xl text-base font-normal leading-7 text-white/86 sm:hidden [word-break:keep-all]">
             흩어진 뉴스와 시장 데이터를 모아 오늘의 부동산 신호를 한눈에 보여줍니다.
           </p>
 
           <div className="flex flex-wrap gap-2.5">
             <Link
               href={pickHref}
-              className="inline-flex h-11 items-center rounded-full bg-[#11140f] px-7 text-sm font-medium text-white transition hover:bg-[#2a2d2f] max-[639px]:w-full max-[639px]:justify-center sm:h-12 sm:text-base"
+              className="inline-flex h-11 items-center rounded-full bg-[#d6e85c] px-7 text-sm font-semibold text-[#050505] transition hover:bg-[#e1f174] max-[639px]:w-full max-[639px]:justify-center sm:h-12 sm:text-base"
             >
               시작하기
             </Link>
             <Link
               href="/tools/jeonse-check"
-              className="hidden h-11 items-center rounded-full border border-[#11140f] bg-transparent px-5 text-sm font-medium text-[#11140f] transition hover:bg-white/45 sm:inline-flex sm:h-12 sm:text-base"
+              className="hidden h-11 items-center rounded-full border border-white/38 bg-white/10 px-5 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/20 sm:inline-flex sm:h-12 sm:text-base"
             >
               전세 안전 체크
             </Link>
           </div>
-
-          <div className="sm:hidden">
-            <HeroPhotoRotator />
-          </div>
-
-          <div className="grid max-w-xl gap-3 border-t border-[#11140f]/12 pt-4">
-            <p className="text-xs font-normal text-[#5f6a6e] sm:text-sm">
-              {sourceCountLabel} · {evidenceLabel} · 투자 조언 아님
-            </p>
-            <span className="sr-only">
-              내 상황별 영향 · 무주택자 확인 · 세입자 주의 · 투자자 공실 리스크 · 주의 · 확인
-            </span>
-          </div>
         </div>
 
-        <div className="hidden sm:block">
-          <HeroPhotoRotator />
+        <div className="mt-9 grid max-w-[48rem] gap-3 border-t border-white/22 pt-4 sm:mt-12 sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-4">
+          <p className="text-xs font-normal text-white/72 sm:text-sm">
+            {sourceCountLabel} · {evidenceLabel} · 투자 조언 아님
+          </p>
+          <div className="flex w-fit items-center gap-3 rounded-full border border-white/22 bg-[#07110f]/44 px-4 py-3 text-white shadow-[0_18px_50px_rgba(0,0,0,0.22)] backdrop-blur-md">
+            <span className="text-xs font-medium text-white/78">
+              오늘의 동네 흐름
+            </span>
+            <span className="h-2 w-2 rounded-full bg-[#d6e85c] shadow-[0_0_18px_rgba(214,232,92,0.85)]" />
+          </div>
+          <span className="sr-only">
+            내 상황별 영향 · 무주택자 확인 · 세입자 주의 · 투자자 공실 리스크 · 주의 · 확인
+          </span>
         </div>
       </div>
     </section>
