@@ -1,6 +1,9 @@
 import "server-only";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  createSupabaseAdminClient,
+  createSupabaseServerClient,
+} from "@/lib/supabase/server";
 import type { Database } from "@/lib/supabase/database.types";
 import type { CommunityPostType } from "@/lib/community-shared";
 
@@ -18,6 +21,8 @@ export type CommunityPost = {
   commentCount: number;
   createdAt: string;
 };
+
+type CommunityPostStatus = "pending" | "published" | "rejected";
 
 type CommunityPostRow = Database["public"]["Tables"]["community_posts"]["Row"];
 
@@ -77,6 +82,42 @@ export async function getCommunityPosts(limit = 20) {
   return {
     mode: "supabase" as const,
     reason: undefined,
+    posts: data.map(mapCommunityPost),
+  };
+}
+
+export async function getAdminCommunityPosts(
+  status: CommunityPostStatus = "pending",
+  limit = 30,
+) {
+  const supabase = createSupabaseAdminClient();
+
+  if (!supabase) {
+    return {
+      ok: false as const,
+      message: "Supabase admin env가 설정되지 않았습니다.",
+      posts: [] as CommunityPost[],
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("community_posts")
+    .select("*")
+    .eq("status", status)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    return {
+      ok: false as const,
+      message: error.message,
+      posts: [] as CommunityPost[],
+    };
+  }
+
+  return {
+    ok: true as const,
+    message: "",
     posts: data.map(mapCommunityPost),
   };
 }

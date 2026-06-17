@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdminCommunityPostActions } from "@/components/admin-community-post-actions";
 import { AdminLinkActions } from "@/components/admin-link-actions";
 import { DataSourceHealthPanel } from "@/components/data-source-health-panel";
 import { NaverNewsIngestButton } from "@/components/naver-news-ingest-button";
 import { RssIngestButton } from "@/components/rss-ingest-button";
 import { SiteHeader } from "@/components/site-header";
 import { getCurrentUser } from "@/lib/auth";
+import { getAdminCommunityPosts } from "@/lib/community";
+import { communityPostTypeLabels } from "@/lib/community-shared";
 import { getSetupStatus } from "@/lib/env";
 import { getAdminLinks, getRssSources } from "@/lib/radar-repository";
 
@@ -33,6 +36,13 @@ export default async function AdminPage() {
         evidenceCounts: {} as Record<string, number>,
       };
   const rssSources = auth.user?.isAdmin ? await getRssSources() : [];
+  const communityPending = auth.user?.isAdmin
+    ? await getAdminCommunityPosts("pending")
+    : {
+        ok: false as const,
+        posts: [],
+        message: "",
+      };
 
   return (
     <>
@@ -115,7 +125,68 @@ export default async function AdminPage() {
               <section className="grid gap-3">
                 <div>
                   <h3 className="text-lg font-black text-[#14110f]">
-                    검토 대기
+                    커뮤니티 검토 대기
+                  </h3>
+                  {!communityPending.ok ? (
+                    <p className="mt-1 text-sm font-semibold text-[#9f2f25]">
+                      {communityPending.message}
+                    </p>
+                  ) : null}
+                </div>
+
+                {communityPending.posts.length > 0 ? (
+                  <div className="divide-y divide-[#cbd6d8] border-y border-[#cbd6d8]">
+                    {communityPending.posts.map((post) => (
+                      <article
+                        key={post.id}
+                        className="grid gap-4 py-4 lg:grid-cols-[1fr_auto] lg:px-2"
+                      >
+                        <div className="min-w-0">
+                          <div className="mb-2 flex flex-wrap gap-1.5">
+                            <span className="inline-flex h-6 items-center rounded-sm border border-[#cbd6d8] bg-[#f8fbfb] px-2 text-xs font-bold text-[#11140f]">
+                              {communityPostTypeLabels[post.postType]}
+                            </span>
+                            <span className="inline-flex h-6 items-center rounded-sm border border-[#cbd6d8] bg-white px-2 text-xs font-bold text-[#4f5a5d]">
+                              {post.region}
+                            </span>
+                            {post.category ? (
+                              <span className="inline-flex h-6 items-center rounded-sm border border-[#cbd6d8] bg-[#f8fbfb] px-2 text-xs font-bold text-[#667174]">
+                                {post.category}
+                              </span>
+                            ) : null}
+                          </div>
+                          <h4 className="text-base font-black leading-snug text-[#14110f] [word-break:keep-all]">
+                            {post.title}
+                          </h4>
+                          <p className="mt-2 text-sm font-semibold leading-6 text-[#4f5a5d]">
+                            {post.body}
+                          </p>
+                          {post.sourceUrl ? (
+                            <a
+                              href={post.sourceUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="mt-2 block break-all text-sm font-semibold leading-6 text-[#667174] underline-offset-4 hover:underline"
+                            >
+                              {post.sourceUrl}
+                            </a>
+                          ) : null}
+                        </div>
+                        <AdminCommunityPostActions postId={post.id} />
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="rounded-md border border-[#cbd6d8] bg-white p-5 text-sm font-semibold text-[#667174]">
+                    지금은 검토 대기 커뮤니티 글이 없습니다.
+                  </div>
+                )}
+              </section>
+
+              <section className="grid gap-3">
+                <div>
+                  <h3 className="text-lg font-black text-[#14110f]">
+                    링크 검토 대기
                   </h3>
                   {!pending.ok ? (
                     <p className="mt-1 text-sm font-semibold text-[#9f2f25]">
