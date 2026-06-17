@@ -87,6 +87,26 @@
 - Law Open API: `LAW_OPEN_API_OC`는 들어왔지만 현재 호출은 `필수입력요소 검증에 실패하였습니다` 응답을 반환해 정상 근거로 저장하지 않고 warning으로만 남긴다.
 - OpenAI live summaries: `OPENAI_API_KEY`는 준비되어 있고 admin summary route도 있지만, `npm run data:live`는 `LIVE_USE_OPENAI=1`일 때만 OpenAI structured summary를 사용한다. 기본값은 fallback editorial template이다.
 
+## API Integration Status
+
+2026-06-17 기준 API 반영 상태는 아래와 같다. 비밀값은 저장하지 않고 변수명과 제품 반영 범위만 기록한다.
+
+| 구분 | 상태 | env / source | 현재 제품 반영 |
+| --- | --- | --- | --- |
+| Supabase DB/Auth | 실제 반영 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY` | 홈/브리프/상세 링크 조회, 로그인, 저장, 추천, 제보, 커뮤니티 글쓰기, 관리자 큐 |
+| Naver Search API | 실제 반영 | `NAVER_CLIENT_ID`, `NAVER_CLIENT_SECRET` | `npm run data:live`에서 최신 부동산 뉴스 후보를 수집해 `links`와 `data_observations`에 저장 |
+| DATA.go.kr / 국토부 RTMS | 실제 일부 반영 | `DATA_GO_KR_SERVICE_KEY`, `MOLIT_APT_TRADE_API_URL` | 아파트 실거래가 API 표본을 근거 관측값으로 저장하고 관련 뉴스 링크에 연결 |
+| 한국은행 ECOS | 실제 일부 반영 | `ECOS_API_KEY` | 기준금리 관측값을 근거 관측값으로 저장하고 관련 뉴스 링크에 연결 |
+| OpenAI Responses API | 부분 연결 | `OPENAI_API_KEY`, `OPENAI_SUMMARY_MODEL`, `LIVE_USE_OPENAI` | 관리자 요약 생성 route와 live ingest 옵션이 있다. `LIVE_USE_OPENAI=1`일 때 structured summary를 시도한다 |
+| RSS ingest | route 준비 | `RSS_INGEST_SECRET`, `rss_sources` table | 수집 route는 있지만 현재 `rss_sources`가 비어 있어 공개 뉴스 원천으로는 쓰지 않는다 |
+| REB/R-ONE | env 준비, 미반영 | `REB_STATS_API_KEY`, `REB_STATS_API_BASE_URL`, `REB_STATS_API_DOC_URL`, `REB_*_STAT_ID` | 통계표 ID와 지역 코드 매핑 전이라 지역 흐름/시각화에 아직 실제 통계로 반영되지 않는다 |
+| Law Open API | 키 준비, 파라미터 미해결 | `LAW_OPEN_API_OC` | 현재 호출이 필수 파라미터 검증에서 실패해 정상 근거로 저장하지 않고 warning으로만 남긴다 |
+| 지도/주소/지역 후보 API | 후보 | `KAKAO_REST_API_KEY`, `JUSO_CONFIRM_KEY`, `VWORLD_API_KEY` | 주소 검색, 좌표 변환, 지도 레이어를 붙일 때 사용할 후보. 현재 공개 화면에는 미반영 |
+| 지역/생활/주택금융 후보 API | 후보 | `SEOUL_OPEN_DATA_API_KEY`, `GG_DATA_API_KEY`, `HOUSTAT_API_KEY`, `HUG_DATA_API_KEY`, `FSS_FINLIFE_API_KEY` | 지역 생활 정보, 주택금융, 보증, 대출 비교를 붙일 때 사용할 후보. 현재 공개 화면에는 미반영 |
+| 단지/건물/청약 후보 API | 후보 | `BUILDING_HUB_SERVICE_KEY`, `KAPT_API_KEY`, `CHEONGYAK_HOME_API_KEY` | 건축물대장, 관리비, 단지 정보, 청약 정보를 붙일 때 사용할 후보. 현재 공개 화면에는 미반영 |
+
+요약하면 현재 제품에 실제로 붙은 것은 `Supabase + Naver Search + DATA.go.kr RTMS + ECOS + 일부 OpenAI 요약`이다. REB/R-ONE, Law Open API, 지도/주소, 단지/관리비/청약 API는 다음 연결 대상이다.
+
 ## Run
 
 ```bash
