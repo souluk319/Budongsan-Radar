@@ -219,9 +219,12 @@ export async function getPublishedLinks(): Promise<RadarLinksResult> {
     };
   }
 
+  const links = data.map(mapLinkRow);
+  const realLinks = links.filter((link) => !link.isSample);
+
   return {
     mode: "supabase",
-    links: data.map(mapLinkRow),
+    links: realLinks.length >= 8 ? realLinks : links,
   };
 }
 
