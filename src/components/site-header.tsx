@@ -57,7 +57,7 @@ export async function SiteHeader() {
             제보
           </Link>
           {auth.user ? (
-            <span className="inline-flex h-9 max-w-[8rem] shrink-0 items-center truncate rounded-full border border-white/20 bg-white/10 px-3 text-xs font-medium text-white sm:max-w-[12rem]">
+            <span className="hidden h-9 max-w-[8rem] shrink-0 items-center truncate rounded-full border border-white/20 bg-white/10 px-3 text-xs font-medium text-white min-[520px]:inline-flex sm:max-w-[12rem]">
               {auth.user.isAdmin ? "운영자" : "사용자"} · {auth.user.email}
             </span>
           ) : (
