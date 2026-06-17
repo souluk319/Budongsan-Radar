@@ -49,12 +49,40 @@
 
 ## Project Status
 
-- Status: Next.js + Supabase/OpenAI-ready MVP
+- Status: Next.js + Supabase live-data MVP
 - Public brand: `집집`
 - Feature language: `집픽`
 - Internal codename: `Budongsan Radar`
 - Folder: `projects/experiments/budongsan-radar`
-- Current app: Next.js TypeScript App Router with seed fallback, Supabase DB/Auth routes, RSS ingest route, and OpenAI summary route
+- Current app: Next.js TypeScript App Router with Supabase DB/Auth, live data ingest, seed fallback, admin routes, and OpenAI-ready summary routes
+
+## Live Data Status
+
+2026-06-17 기준으로 공개 홈/브리프/상세 화면에 실제로 반영되는 데이터 흐름은 아래와 같다.
+
+- Supabase `links`: `status = published` 링크를 홈, 브리프, 상세 화면에서 읽는다.
+- Live-first display: published 실수집 링크가 8개 이상이면 공개 피드에서는 샘플 링크를 섞지 않고 `is_sample = false` 링크를 우선 사용한다.
+- Naver Search API: `npm run data:live`가 네이버 뉴스 검색 API로 최신 부동산 기사 후보를 수집해 `links`에 저장한다.
+- DATA.go.kr RTMS API: 국토교통부 아파트 실거래가 API 표본을 `data_observations`에 저장하고 관련 링크 근거로 연결한다.
+- Bank of Korea ECOS API: 기준금리 관측값을 `data_observations`에 저장하고 관련 링크 근거로 연결한다.
+- Supabase `summaries`: live ingest가 각 링크의 3줄 요약, 영향 대상, 체크포인트를 저장한다.
+- Supabase `data_observations` / `link_observations`: 뉴스 맥락, 실거래 표본, ECOS 관측값을 링크별 근거로 연결한다.
+
+현재 DB 확인값:
+
+- Published live links: 20
+- Published sample links: 12
+- Daily live picks: 8
+- Summaries: 26
+- Live observations: 23
+- Live observation sources: `naver` 20, `data_go_kr` 2, `ecos` 1
+
+아직 화면에 안정적으로 반영되지 않는 것:
+
+- RSS: route는 있지만 `rss_sources`가 0개라 현재 공개 화면의 실제 원천은 아니다.
+- REB/R-ONE: env와 문서 기준은 준비됐지만 실제 통계 endpoint/stat id 매핑이 아직 없어 지역 통계로 반영되지 않는다.
+- Law Open API: `LAW_OPEN_API_OC`는 들어왔지만 현재 호출은 `필수입력요소 검증에 실패하였습니다` 응답을 반환해 정상 근거로 저장하지 않고 warning으로만 남긴다.
+- OpenAI live summaries: `OPENAI_API_KEY`는 준비되어 있고 admin summary route도 있지만, `npm run data:live`는 `LIVE_USE_OPENAI=1`일 때만 OpenAI structured summary를 사용한다. 기본값은 fallback editorial template이다.
 
 ## Run
 
@@ -102,7 +130,30 @@ Use the new Supabase publishable/secret keys when available. Legacy anon/service
 ## MVP Notes
 
 - Without Supabase env, the app intentionally falls back to local seed data.
-- With Supabase env, `/submit`, save, vote, auth, `/admin`, and RSS ingest write to the database.
+- With Supabase env, `/submit`, save, vote, auth, `/admin`, live ingest, RSS ingest, and Naver ingest write to the database.
 - OpenAI summary generation requires `OPENAI_API_KEY` and is available through the admin queue.
 - RSS ingest is allowlisted through the `rss_sources` table; arbitrary full-page scraping is not included.
 - `npm run verify:mvp` runs lint, production build, and route-level smoke checks without requiring real env.
+
+## More Data/Auth Needed
+
+다음 단계에서 제품 품질을 올리려면 새 비밀키보다 원천별 "정확한 사용 승인/endpoint 매핑"이 더 중요하다.
+
+1. REB/R-ONE 통계 endpoint 매핑
+   - 필요한 값: `REB_REGION_PRICE_INDEX_STAT_ID`, `REB_JEONSE_PRICE_INDEX_STAT_ID`, `REB_TRADE_VOLUME_STAT_ID`, `REB_BUYING_SENTIMENT_STAT_ID`, `REB_REGION_CODE_SET`
+   - 목적: 지역별 가격지수, 전세지수, 거래량, 매수심리를 홈의 지역 흐름/시각화에 연결
+
+2. Law Open API 파라미터 확정
+   - 필요한 것: `LAW_OPEN_API_OC` 외에 현재 쓰는 검색 endpoint의 필수 파라미터 확인
+   - 목적: 정책/법령 이슈에 시행일, 법령명, 조문 근거 연결
+
+3. 공공데이터포털 활용신청 범위 확인
+   - 이미 필요한 키는 `DATA_GO_KR_SERVICE_KEY`에 들어왔지만, API별 활용신청이 열려 있어야 한다.
+   - 우선순위: 아파트 실거래, 아파트 전월세, 오피스텔 매매/전월세, 연립다세대, 단독다가구
+
+4. RSS allowlist 등록
+   - 필요한 것: `rss_sources` seed 또는 admin 등록
+   - 후보: 국토교통부, 금융위원회, 정책브리핑, 한국부동산원 공지, HUG/HF 보도자료
+
+5. Vercel 환경변수 확인
+   - Preview/Production 모두 Supabase, Naver, DATA.go.kr, ECOS, Law, OpenAI 값을 넣어야 배포 환경에서도 로컬과 같은 데이터 흐름이 동작한다.
