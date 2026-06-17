@@ -15,6 +15,13 @@ const statusClasses: Record<AudienceStatus, string> = {
   관망: "border-[#e5dac8] bg-white text-[#5e554b]",
 };
 
+const actionByLabel: Record<AudienceSegment["label"], string> = {
+  무주택자: "대출 조건 먼저",
+  "1주택자": "갈아타기 점검",
+  "전세 세입자": "보증금 안전",
+  투자자: "리스크 먼저",
+};
+
 export function AudienceImpactChips({
   segments,
   initialSegmentLabel,
@@ -30,13 +37,13 @@ export function AudienceImpactChips({
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="text-sm font-black text-[#14110f]">내 상황별 영향</p>
-          <p className="mt-0.5 text-xs font-semibold text-[#6b6254] sm:text-sm">
-            내 입장에서는 뭘 확인해야 하는지 먼저 봅니다.
+          <p className="mt-0.5 text-xs font-semibold text-[#6b6254]">
+            내 입장에서 먼저 확인할 것만 짧게 봅니다.
           </p>
         </div>
       </div>
 
-      <div className="filter-scroll flex gap-2 overflow-x-auto pb-1">
+      <div className="grid grid-cols-2 gap-2">
         {segments.map((segment) => {
           const isSelected = segment.label === selectedSegment?.label;
 
@@ -45,33 +52,38 @@ export function AudienceImpactChips({
               key={segment.label}
               type="button"
               onClick={() => setSelectedLabel(segment.label)}
-              className={`min-w-[7.6rem] shrink-0 rounded-md border px-3 py-2.5 text-left transition sm:min-w-[8.25rem] sm:py-3 ${
+              className={`min-w-0 rounded-md border px-2.5 py-2 text-left transition sm:px-3 sm:py-3 ${
                 isSelected
                   ? "border-[#d97706] bg-[#fff8ec] text-[#14110f] shadow-[0_8px_22px_rgba(154,79,0,0.09)]"
                   : `${statusClasses[segment.status]} hover:border-[#14110f]`
               }`}
             >
-              <span className="block text-sm font-black leading-tight">
+              <span className="block text-[0.82rem] font-black leading-tight sm:text-sm">
                 {segment.label}
               </span>
-              <span
-                className={`mt-2 inline-flex rounded-sm px-2 py-0.5 text-xs font-black ${
-                  isSelected
-                    ? "bg-[#d97706] text-white"
-                    : "bg-white/65 text-inherit"
-                }`}
-              >
-                {segment.status}
-              </span>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                <span
+                  className={`inline-flex rounded-sm px-1.5 py-0.5 text-[0.7rem] font-black sm:px-2 sm:text-xs ${
+                    isSelected
+                      ? "bg-[#d97706] text-white"
+                      : "bg-white/65 text-inherit"
+                  }`}
+                >
+                  {segment.status}
+                </span>
+                <span className="text-[0.7rem] font-black text-inherit sm:text-xs">
+                  {actionByLabel[segment.label]}
+                </span>
+              </div>
             </button>
           );
         })}
       </div>
 
       {selectedSegment ? (
-        <div className="rounded-md border border-[#eadfce] bg-white px-3.5 py-2.5 sm:px-4 sm:py-3">
+        <div className="rounded-md border border-[#eadfce] bg-white px-3 py-2 sm:px-4 sm:py-3">
           <p className="text-xs font-black text-[#8a7d6d]">내 기준 한 줄</p>
-          <p className="mt-1 line-clamp-2 text-sm font-bold leading-6 text-[#2b2520]">
+          <p className="mt-1 line-clamp-2 text-sm font-bold leading-5 text-[#2b2520] sm:leading-6">
             {selectedSegment.body}
           </p>
         </div>

@@ -126,6 +126,21 @@ async function main() {
     "Budongsan Radar",
     "RADAR",
     "레이더 점수",
+    "오늘의 시장지도",
+    "뉴스가 어디를 흔드는지 먼저 봅니다",
+    "Daily Signal Map",
+    "집픽 핀",
+    "Home Question Board",
+    "오늘 사람들이 묻는 것",
+    "질문을 먼저 고르고",
+    "집집 답",
+    "오늘 켜짐",
+    "나 집 살 수 있어?",
+    "보증금 괜찮아?",
+    "넣어볼 만해?",
+    "기다려도 돼?",
+    "이슈 압력",
+    "전체 이슈",
     "시장 온도",
     "신호 테이프",
     "MVP",
@@ -157,18 +172,17 @@ async function main() {
     assertTitle(home, "집집", "home");
     assertSingleH1(home, "home");
     assertIncludes(home, "집집", "home");
-    assertIncludes(home, "오늘의 시장지도", "home");
-    assertIncludes(home, "뉴스가 어디를 흔드는지 먼저 봅니다", "home");
-    assertIncludes(home, "오늘의 판세", "home");
+    assertIncludes(home, "브리프", "home");
+    assertIncludes(home, "집값을", "home");
+    assertIncludes(home, "먼저 읽다", "home");
+    assertIncludes(home, "시작하기", "home");
+    assertIncludes(home, "Home Signal Board", "home");
     assertIncludes(home, "실제 수집", "home");
-    assertIncludes(home, "지금 뜨는 이슈", "home");
-    assertIncludes(home, "강한 신호", "home");
-    assertIncludes(home, "전체 이슈", "home");
-    assertIncludes(home, "중요도", "home");
-    assertIncludes(home, "오늘의 집픽", "home");
+    assertIncludes(home, "근거", "home");
+    assertIncludes(home, "주의", "home");
+    assertIncludes(home, "확인", "home");
     assertIncludes(home, "내 상황별 영향", "home");
     assertIncludes(home, "지역 흐름", "home");
-    assertIncludes(home, "이슈 압력", "home");
     assertIncludes(home, "오늘 볼 이슈", "home");
     assertIncludes(home, "꼭 보기", "home");
     assertIncludes(home, "세입자가 오늘 볼 것", "home");

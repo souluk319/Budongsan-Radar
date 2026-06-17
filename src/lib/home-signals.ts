@@ -4,6 +4,13 @@ export type SignalLabel = "강한 신호" | "지켜볼 신호" | "소음 가능�
 export type SignalTone = "strong" | "watch" | "noise";
 export type RegionHeatTone = "hot" | "watch" | "mixed" | "cool";
 export type AudienceStatus = "주의" | "관망" | "확인" | "기회";
+export type UserQuestionKey =
+  | "loan"
+  | "rent"
+  | "subscription"
+  | "neighborhood"
+  | "timing";
+export type UserQuestionIntensity = "high" | "medium" | "low";
 
 export type AudienceSegment = {
   label: "무주택자" | "1주택자" | "전세 세입자" | "투자자";
@@ -23,9 +30,22 @@ export type RegionFlow = {
   signalScore: number;
 };
 
+export type UserQuestionSignal = {
+  key: UserQuestionKey;
+  label: string;
+  question: string;
+  answer: string;
+  action: string;
+  href: string;
+  score: number;
+  intensity: UserQuestionIntensity;
+  status: AudienceStatus;
+};
+
 export type HomeSignalModel = {
   dateLabel: string;
   moodLabel: "관망" | "반등 신호" | "과열 주의" | "냉각" | "혼조";
+  dailyQuestionHeadline: string;
   briefHeadline: string;
   briefSummary: string;
   importanceLabel: "높음" | "보통" | "낮음";
@@ -33,6 +53,10 @@ export type HomeSignalModel = {
   heroSubVerdict: string;
   heroMemoryLine: string;
   heroScore: number;
+  todayPickDisplayTitle: string;
+  todayActionLine: string;
+  primaryQuestion: UserQuestionSignal;
+  userQuestions: UserQuestionSignal[];
   keywords: string[];
   strongestLink?: RadarLink;
   strongLinks: RadarLink[];
@@ -68,6 +92,69 @@ const categoryAudienceMap: Record<Category, AudienceSegment["label"][]> = {
   "지역 이슈": ["1주택자", "전세 세입자"],
   프롭테크: ["무주택자", "투자자"],
 };
+
+const questionDefinitions: Array<
+  Omit<UserQuestionSignal, "score" | "intensity"> & {
+    categories: Category[];
+    fallbackScore: number;
+  }
+> = [
+  {
+    key: "loan",
+    label: "대출 조건",
+    question: "월상환액 버틸까",
+    answer: "한도보다 월상환액과 시행일을 먼저 봅니다.",
+    action: "월상환액 먼저",
+    href: "/?category=%EB%8C%80%EC%B6%9C%2F%EA%B8%88%EB%A6%AC",
+    status: "확인",
+    categories: ["정책", "대출/금리"],
+    fallbackScore: 58,
+  },
+  {
+    key: "rent",
+    label: "전세 안전",
+    question: "보증금 위험 없나",
+    answer: "보증보험, 선순위, 전세가율을 같이 확인합니다.",
+    action: "보증금 점검",
+    href: "/?category=%EC%A0%84%EC%84%B8%2F%EC%9B%94%EC%84%B8",
+    status: "주의",
+    categories: ["전세/월세", "대출/금리"],
+    fallbackScore: 54,
+  },
+  {
+    key: "subscription",
+    label: "청약 기회",
+    question: "분양가·입지 맞나",
+    answer: "경쟁률보다 분양가, 입지, 입주 물량을 봅니다.",
+    action: "분양가 확인",
+    href: "/?category=%EC%B2%AD%EC%95%BD",
+    status: "관망",
+    categories: ["청약", "정책"],
+    fallbackScore: 48,
+  },
+  {
+    key: "neighborhood",
+    label: "우리동네",
+    question: "전세·거래 흔들리나",
+    answer: "지역 기사보다 거래, 전세, 공급 흐름을 같이 봅니다.",
+    action: "지역 흐름 보기",
+    href: "/regions/seoul",
+    status: "확인",
+    categories: ["지역 이슈", "매매시장", "재건축/재개발"],
+    fallbackScore: 46,
+  },
+  {
+    key: "timing",
+    label: "매수 타이밍",
+    question: "정책 확정 전 관망할까",
+    answer: "가격보다 거래량과 정책 확정 여부를 먼저 봅니다.",
+    action: "정책 확정 전 관망",
+    href: "/?category=%EB%A7%A4%EB%A7%A4%EC%8B%9C%EC%9E%A5",
+    status: "관망",
+    categories: ["매매시장", "경매", "재건축/재개발", "정책"],
+    fallbackScore: 44,
+  },
+];
 
 type HomeLeadCopy = Pick<
   HomeSignalModel,
@@ -293,6 +380,36 @@ function deriveBriefHeadline(strongestLink: RadarLink | undefined, links: RadarL
   return `오늘은 ${strongestLink.category} 이슈가 중요합니다`;
 }
 
+function deriveDailyQuestionHeadline(strongestLink: RadarLink | undefined, links: RadarLink[]) {
+  if (!strongestLink) {
+    return "오늘 볼 이슈를 모으는 중입니다";
+  }
+
+  const categories = new Set(
+    [strongestLink.category, ...links.map((link) => link.category)].filter(Boolean),
+  );
+  const hasLoanOrPolicy =
+    categories.has("정책") || categories.has("대출/금리");
+
+  if (hasLoanOrPolicy && categories.has("전세/월세")) {
+    return "오늘은 대출·전세부터 보세요";
+  }
+
+  if (hasLoanOrPolicy && categories.has("청약")) {
+    return "오늘은 대출·청약부터 보세요";
+  }
+
+  if (strongestLink.category === "전세/월세") {
+    return "오늘은 전세 안전부터 보세요";
+  }
+
+  if (strongestLink.category === "청약") {
+    return "오늘은 청약 조건부터 보세요";
+  }
+
+  return `오늘은 ${strongestLink.category} 이슈부터 보세요`;
+}
+
 function deriveBriefSummary(strongestLink: RadarLink | undefined, links: RadarLink[]) {
   if (!strongestLink) {
     return "새 이슈가 쌓이면 내 상황별로 쉽게 풀어드릴게요.";
@@ -392,7 +509,7 @@ function deriveHeroSubVerdict({
 
 function deriveHeroMemoryLine(strongestLink: RadarLink | undefined) {
   if (!strongestLink) {
-    return "아직 강한 신호가 없습니다.";
+    return "아직 오늘의 집픽을 고르는 중입니다.";
   }
 
   const leadCopy = getHomeLeadCopy(strongestLink);
@@ -414,6 +531,70 @@ function deriveHeroMemoryLine(strongestLink: RadarLink | undefined) {
   }
 
   return strongestLink.impactLine;
+}
+
+function deriveTodayPickDisplayTitle(link: RadarLink | undefined) {
+  if (!link) {
+    return "오늘 먼저 볼 이슈를 고르는 중입니다";
+  }
+
+  if (link.category === "정책") {
+    return "정책 변수, 매수심리를 흔듭니다";
+  }
+
+  if (link.category === "대출/금리") {
+    return "대출 조건, 상환 부담부터 보세요";
+  }
+
+  if (link.category === "전세/월세") {
+    return "전세 흐름, 보증금 안전부터 보세요";
+  }
+
+  if (link.category === "청약") {
+    return "청약 열기, 입지별로 갈립니다";
+  }
+
+  if (link.category === "재건축/재개발") {
+    return "정비사업 기대감, 지역별로 나눠 보세요";
+  }
+
+  if (link.category === "경매") {
+    return "경매 지표, 시장 스트레스부터 보세요";
+  }
+
+  return `${link.category} 이슈, 내 상황부터 확인하세요`;
+}
+
+function deriveTodayActionLine(link: RadarLink | undefined, primaryAudience: AudienceSegment | undefined) {
+  if (!link) {
+    return "관심 지역과 내 상황을 먼저 맞춰보세요.";
+  }
+
+  if (link.category === "정책" || link.category === "대출/금리") {
+    return "적용 대상, 시행일, 월 상환액을 먼저 확인하세요.";
+  }
+
+  if (link.category === "전세/월세") {
+    return "보증보험, 선순위, 전세가율을 먼저 확인하세요.";
+  }
+
+  if (link.category === "청약") {
+    return "가점, 분양가, 입주 물량을 같이 보세요.";
+  }
+
+  if (link.category === "매매시장") {
+    return "거래량과 호가가 같이 움직이는지 확인하세요.";
+  }
+
+  if (link.category === "재건축/재개발") {
+    return "사업 단계와 추가 분담금 가능성을 먼저 보세요.";
+  }
+
+  if (primaryAudience?.status === "주의") {
+    return `${primaryAudience.label}는 리스크 조건부터 확인하세요.`;
+  }
+
+  return "제목보다 내 조건에 연결되는 변수부터 보세요.";
 }
 
 function getRegionHeatTone(region: Exclude<Region, "전국">, count: number, topScore: number): RegionHeatTone {
@@ -481,6 +662,57 @@ function deriveRegionFlows(links: RadarLink[]): RegionFlow[] {
   });
 }
 
+function getQuestionIntensity(score: number): UserQuestionIntensity {
+  if (score >= 78) {
+    return "high";
+  }
+
+  if (score >= 58) {
+    return "medium";
+  }
+
+  return "low";
+}
+
+function deriveUserQuestions(
+  links: RadarLink[],
+  strongestLink: RadarLink | undefined,
+): UserQuestionSignal[] {
+  return questionDefinitions
+    .map((definition) => {
+      const matchingLinks = links.filter((link) =>
+        definition.categories.includes(link.category),
+      );
+      const topScore = matchingLinks.reduce(
+        (score, link) => Math.max(score, link.score),
+        definition.fallbackScore,
+      );
+      const strongestBoost = strongestLink
+        ? definition.categories.includes(strongestLink.category)
+          ? 12
+          : 0
+        : 0;
+      const countBoost = Math.min(matchingLinks.length * 4, 14);
+      const score = clamp(topScore + strongestBoost + countBoost, 24, 98);
+
+      return {
+        key: definition.key,
+        label: definition.label,
+        question: definition.question,
+        answer: definition.answer,
+        action: definition.action,
+        href: definition.href,
+        score,
+        intensity: getQuestionIntensity(score),
+        status:
+          definition.status === "관망" && score >= 86
+            ? "확인"
+            : definition.status,
+      };
+    })
+    .sort((a, b) => b.score - a.score);
+}
+
 export function createHomeSignalModel({
   allLinks,
   filteredLinks,
@@ -502,6 +734,7 @@ export function createHomeSignalModel({
   const moodLabel = deriveMoodLabel(allLinks);
   const audienceSegments = deriveAudienceSegments(strongestLink);
   const primaryAudience = selectPrimaryAudience(audienceSegments);
+  const userQuestions = deriveUserQuestions(allLinks, strongestLink);
   const strongLinks = sortedVisibleLinks.filter((link) => link.score >= 86);
   const watchLinks = sortedVisibleLinks.filter(
     (link) => link.score >= 75 && link.score < 86,
@@ -511,6 +744,7 @@ export function createHomeSignalModel({
   return {
     dateLabel: getDateLabel(),
     moodLabel,
+    dailyQuestionHeadline: deriveDailyQuestionHeadline(strongestLink, allLinks),
     briefHeadline: deriveBriefHeadline(strongestLink, allLinks),
     briefSummary: deriveBriefSummary(strongestLink, allLinks),
     importanceLabel: deriveImportanceLabel(strongestLink?.score ?? 0),
@@ -522,6 +756,10 @@ export function createHomeSignalModel({
     }),
     heroMemoryLine: deriveHeroMemoryLine(strongestLink),
     heroScore: strongestLink?.score ?? 0,
+    todayPickDisplayTitle: deriveTodayPickDisplayTitle(strongestLink),
+    todayActionLine: deriveTodayActionLine(strongestLink, primaryAudience),
+    primaryQuestion: userQuestions[0],
+    userQuestions,
     keywords: deriveKeywords(strongestLink, sortedVisibleLinks),
     strongestLink,
     strongLinks,

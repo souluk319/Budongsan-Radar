@@ -12,30 +12,24 @@ export async function SiteHeader() {
   const auth = await getCurrentUser();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-[#eadfce] bg-[#fffdf8]/95 backdrop-blur">
-      <div className="mx-auto flex h-12 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:h-[3.25rem] sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/95 text-white backdrop-blur">
+      <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:h-16 sm:px-6 lg:px-8">
         <div className="flex min-w-0 items-center gap-3">
           <Link
             href="/"
             aria-label="집집 홈"
-            className="inline-flex min-w-0 items-center gap-2"
+            className="inline-flex min-w-0 items-center"
           >
-            <span
-              className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#14110f] text-[0.82rem] font-black text-[#fffdf8]"
-              aria-hidden
-            >
-              집
-            </span>
-            <span className="block text-[1.35rem] font-black leading-none text-[#14110f]">
+            <span className="block text-[1.38rem] font-semibold leading-none text-white">
               집집
             </span>
           </Link>
-          <nav className="hidden items-center gap-1.5 md:flex">
+          <nav className="hidden items-center gap-1 md:flex">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="inline-flex h-8 items-center rounded-md px-3 text-sm font-bold text-[#5e554b] hover:bg-white hover:text-[#14110f]"
+                className="inline-flex h-9 items-center rounded-full px-3 text-sm font-medium text-white/78 hover:bg-white/10 hover:text-white"
               >
                 {item.label}
               </Link>
@@ -46,28 +40,34 @@ export async function SiteHeader() {
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Link
             href="/briefing"
-            className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-black text-[#5e554b] hover:bg-white hover:text-[#14110f] md:hidden"
+            className="inline-flex h-9 items-center rounded-full px-2.5 text-xs font-medium text-white/82 hover:bg-white/10 md:hidden"
           >
             브리프
           </Link>
           <Link
             href="/submit"
-            className="inline-flex h-8 items-center rounded-md px-2.5 text-xs font-black text-[#5e554b] hover:bg-white hover:text-[#14110f] md:hidden"
+            className="inline-flex h-9 items-center rounded-full px-2.5 text-xs font-medium text-white/82 hover:bg-white/10 md:hidden"
           >
             제보
           </Link>
           {auth.user ? (
-            <span className="inline-flex h-8 max-w-[8rem] shrink-0 items-center truncate rounded-md border border-emerald-200 bg-emerald-50 px-2.5 text-xs font-semibold text-emerald-800 sm:max-w-[12rem]">
+            <span className="inline-flex h-9 max-w-[8rem] shrink-0 items-center truncate rounded-full border border-white/20 bg-white/10 px-3 text-xs font-medium text-white sm:max-w-[12rem]">
               {auth.user.isAdmin ? "운영자" : "사용자"} · {auth.user.email}
             </span>
           ) : (
             <Link
               href="/login"
-              className="inline-flex h-8 shrink-0 items-center rounded-md bg-[#14110f] px-3 text-sm font-bold text-white hover:bg-[#342b23]"
+              className="inline-flex h-9 shrink-0 items-center rounded-full border border-[#d6e85c] bg-transparent px-4 text-sm font-medium text-white hover:bg-[#d6e85c] hover:text-[#050505]"
             >
               로그인
             </Link>
           )}
+          <Link
+            href="/briefing"
+            className="hidden h-10 shrink-0 items-center rounded-full bg-[#d6e85c] px-5 text-sm font-semibold text-[#050505] hover:bg-[#e1f174] sm:inline-flex"
+          >
+            시작하기
+          </Link>
           {auth.user ? <SignOutButton /> : null}
         </div>
       </div>

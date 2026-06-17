@@ -35,13 +35,13 @@ select {
   min-width: max-content;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem;
-  border: 1px solid #e5dac8;
-  background: #ffffff;
+  border-radius: 999px;
+  border: 1px solid #cbd3d5;
+  background: #f8fbfb;
   padding: 0 0.75rem;
   font-size: 0.875rem;
   font-weight: 650;
-  color: #5e554b;
+  color: #4d575a;
   outline: none;
   transition:
     border-color 150ms ease,
@@ -50,7 +50,7 @@ select {
 }
 
 .filter-chip:hover {
-  border-color: #14110f;
+  border-color: #11140f;
   color: #14110f;
 }
 
@@ -59,8 +59,8 @@ select {
 }
 
 .filter-chip-active {
-  border-color: #14110f;
-  background: #14110f;
+  border-color: #11140f;
+  background: #11140f;
   color: #ffffff;
 }
 

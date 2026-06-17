@@ -32,17 +32,17 @@ export function FilterBar({
   selectedRegion,
 }: FilterBarProps) {
   return (
-    <section className="grid gap-4 rounded-md border border-[#eadfce] bg-white p-4">
+    <section className="grid gap-4 rounded-md border border-[#cbd3d5] bg-white p-4">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-bold text-[#7a7064]">관심 기준</p>
+            <p className="text-sm font-bold text-[#596366]">관심 기준</p>
             <h2 className="mt-1 text-xl font-black text-[#14110f]">
               흐름 좁혀보기
             </h2>
           </div>
           <Link
             href="/"
-            className="h-8 rounded-md border border-[#e5dac8] bg-white px-3 py-1.5 text-xs font-bold text-[#5e554b] hover:border-[#14110f]"
+            className="h-8 rounded-full border border-[#cbd3d5] bg-[#f8fbfb] px-3 py-1.5 text-xs font-bold text-[#4d575a] hover:border-[#11140f] hover:text-[#11140f]"
           >
             전체 보기
           </Link>
