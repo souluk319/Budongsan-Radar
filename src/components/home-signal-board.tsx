@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { BrandLogo } from "@/components/brand-logo";
 import type { HomeSignalModel } from "@/lib/home-signals";
 
 type HomeSignalBoardProps = {
@@ -77,9 +78,7 @@ export function HomeSignalBoard({
       <HeroPhotoBackdrop />
       <div className="relative z-10 mx-auto flex min-h-[calc(100svh-3.5rem)] w-full max-w-7xl flex-col justify-end px-4 pb-8 pt-24 sm:min-h-[calc(100svh-4rem)] sm:px-6 sm:pb-12 sm:pt-28 lg:px-8 lg:pb-16">
         <div className="grid max-w-[48rem] gap-5 sm:gap-7">
-          <p className="text-sm font-medium text-white/82 sm:text-base">
-            집집 부동산 브리프
-          </p>
+          <BrandLogo tone="hero" tagline="부동산 브리프" />
 
           <div className="grid gap-5">
             <h1 className="max-w-[46rem] text-[3.28rem] font-extrabold leading-[0.96] text-white min-[390px]:text-[3.62rem] sm:text-[5.8rem] sm:leading-[0.9] lg:text-[7.1rem] [word-break:keep-all]">

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
+import { BrandLogo } from "@/components/brand-logo";
 import { SignOutButton } from "@/components/sign-out-button";
 
 const navItems = [
@@ -20,9 +21,7 @@ export async function SiteHeader() {
             aria-label="집집 홈"
             className="inline-flex min-w-0 items-center"
           >
-            <span className="block text-[1.38rem] font-semibold leading-none text-white">
-              집집
-            </span>
+            <BrandLogo compact tone="dark" />
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
             {navItems.map((item) => (
