@@ -59,10 +59,11 @@ export function CommunityPostForm({
       className="grid gap-4 rounded-md border border-[#cbd6d8] bg-white/75 p-4 shadow-[0_18px_44px_rgba(26,38,42,0.08)] backdrop-blur"
       onSubmit={async (event) => {
         event.preventDefault();
+        const form = event.currentTarget;
         setPending(true);
         setState({ tone: "idle", message: "" });
 
-        const formData = new FormData(event.currentTarget);
+        const formData = new FormData(form);
         const response = await fetch("/api/community/posts", {
           method: "POST",
           headers: { "content-type": "application/json" },
@@ -88,7 +89,7 @@ export function CommunityPostForm({
           return;
         }
 
-        event.currentTarget.reset();
+        form.reset();
         setState({
           tone: "success",
           message:

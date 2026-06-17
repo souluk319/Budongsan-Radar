@@ -92,11 +92,12 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
       className="grid gap-5"
       onSubmit={async (event) => {
         event.preventDefault();
+        const form = event.currentTarget;
 
         setPending(true);
         setState({ message: "", tone: "idle" });
 
-        const formData = new FormData(event.currentTarget);
+        const formData = new FormData(form);
         const response = await fetch("/api/links", {
           method: "POST",
           headers: { "content-type": "application/json" },
@@ -121,7 +122,7 @@ export function SubmitLinkForm({ canSubmit, isConfigured }: SubmitLinkFormProps)
           return;
         }
 
-        event.currentTarget.reset();
+        form.reset();
         setState({
           message: toFriendlyMessage(
             payload.message,
