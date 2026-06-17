@@ -112,7 +112,7 @@ select {
 
 .hero-rotator-slide {
   opacity: 0;
-  animation: hero-photo-rotate 30s ease-in-out infinite;
+  animation: hero-photo-rotate 30s linear infinite;
 }
 
 .hero-rotator-slide-primary {
@@ -120,21 +120,21 @@ select {
 }
 
 @keyframes hero-photo-rotate {
-  0%,
-  13% {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  16.66%,
-  96% {
+  0% {
     opacity: 0;
     transform: scale(1.035);
   }
 
-  100% {
+  4%,
+  14% {
     opacity: 1;
     transform: scale(1);
+  }
+
+  20%,
+  100% {
+    opacity: 0;
+    transform: scale(1.035);
   }
 }
 

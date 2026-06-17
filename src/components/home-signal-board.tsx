@@ -48,7 +48,7 @@ function HeroPhotoBackdrop() {
           fill
           priority={index === 0}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 42rem, 50vw"
-          style={{ animationDelay: `${index * 5}s` }}
+          style={{ animationDelay: `${index * 5 - 1.2}s` }}
           className={`hero-rotator-slide object-cover object-center ${
             index === 0 ? "hero-rotator-slide-primary" : "hero-rotator-slide-secondary"
           }`}
