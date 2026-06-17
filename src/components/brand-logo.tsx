@@ -7,17 +7,17 @@ type BrandLogoProps = {
 
 const toneStyles = {
   dark: {
-    mark: "bg-[#d6e85c] text-[#07110f] shadow-[0_10px_28px_rgba(214,232,92,0.16)]",
+    mark: "text-[#d6e85c]",
     word: "text-white",
     tag: "text-white/58",
   },
   hero: {
-    mark: "bg-[#d6e85c] text-[#07110f] shadow-[0_16px_40px_rgba(0,0,0,0.24)]",
+    mark: "text-[#d6e85c]",
     word: "text-white",
     tag: "text-white/68",
   },
   light: {
-    mark: "bg-[#07110f] text-[#d6e85c] shadow-[0_10px_24px_rgba(7,17,15,0.12)]",
+    mark: "text-[#07110f]",
     word: "text-[#07110f]",
     tag: "text-[#07110f]/58",
   },
@@ -32,55 +32,38 @@ export function BrandLogo({
   const styles = toneStyles[tone];
 
   return (
-    <span className={`inline-flex min-w-0 items-center gap-2.5 ${className}`}>
+    <span className={`inline-flex min-w-0 items-center gap-2 ${className}`}>
       <span
-        className={`grid size-9 shrink-0 place-items-center rounded-[0.78rem] ${styles.mark}`}
+        className={`grid size-8 shrink-0 place-items-center ${styles.mark}`}
         aria-hidden="true"
       >
         <svg
-          viewBox="0 0 40 40"
-          className="size-7"
+          viewBox="0 0 36 36"
+          className="size-8"
           role="img"
           focusable="false"
         >
           <path
-            d="M8.8 20.7 16.4 13l7.6 7.7"
+            d="M7.8 10.5h8.4l-8.4 15h8.4"
             fill="none"
             stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3.1"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            strokeWidth="4"
           />
           <path
-            d="M16 20.7 23.6 13l7.6 7.7"
+            d="M19.8 10.5h8.4l-8.4 15h8.4"
             fill="none"
             stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3.1"
-            opacity="0.72"
-          />
-          <path
-            d="M12.4 20.4v8.2h15.2v-8.2"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="3.1"
-          />
-          <path
-            d="M18.2 28.6v-5h3.6v5"
-            fill="none"
-            stroke="currentColor"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2.6"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            strokeWidth="4"
           />
         </svg>
       </span>
       <span className="grid min-w-0 gap-0.5">
         <span
-          className={`block whitespace-nowrap text-[1.28rem] font-black leading-none tracking-[0.01em] ${styles.word}`}
+          className={`block whitespace-nowrap text-[1.32rem] font-black leading-none tracking-[0.02em] ${styles.word}`}
         >
           집집
         </span>
