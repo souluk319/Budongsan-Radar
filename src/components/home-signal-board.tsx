@@ -16,6 +16,22 @@ const heroPhotos = [
     src: "/hero-urban-park.png",
     alt: "도심 속 공원과 아파트 야경",
   },
+  {
+    src: "/hero-city-forest.png",
+    alt: "화창한 도시 숲과 아파트",
+  },
+  {
+    src: "/hero-riverside-life.png",
+    alt: "강변 산책로와 주거지",
+  },
+  {
+    src: "/hero-community-courtyard.png",
+    alt: "아파트 커뮤니티 정원",
+  },
+  {
+    src: "/hero-balcony-view.png",
+    alt: "도시 전망이 보이는 발코니",
+  },
 ];
 
 function HeroPhotoRotator() {
@@ -32,6 +48,7 @@ function HeroPhotoRotator() {
           fill
           priority={index === 0}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 42rem, 50vw"
+          style={{ animationDelay: `${index * 5}s` }}
           className={`hero-rotator-slide object-cover object-center ${
             index === 0 ? "hero-rotator-slide-primary" : "hero-rotator-slide-secondary"
           }`}
