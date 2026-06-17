@@ -217,6 +217,16 @@ async function main() {
     assertIncludes(briefing, "오늘 볼 부동산 이슈만 모았습니다", "briefing");
     assertExcludes(briefing, publicForbiddenTerms, "briefing");
 
+    const community = await fetchPage(baseUrl, "/community");
+    assertTitle(community, "커뮤니티 | 집집", "community");
+    assertH1(community, "사람들은 지금 이런 걸 묻고 있어요", "community");
+    assertIncludes(community, "커뮤니티", "community");
+    assertIncludes(community, "질문", "community");
+    assertIncludes(community, "지역 소식", "community");
+    assertIncludes(community, "내 상황 상담", "community");
+    assertIncludes(community, "커뮤니티 글쓰기", "community");
+    assertExcludes(community, publicForbiddenTerms, "community");
+
     const detail = await fetchPage(baseUrl, "/links/policy-loan-rule-watch");
     assertTitle(detail, "대출 완화 기대, 월상환액 먼저 | 집집", "detail");
     assertH1(detail, "대출 완화 기대, 월상환액 먼저", "detail");

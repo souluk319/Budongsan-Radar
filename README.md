@@ -42,6 +42,7 @@
 4. 영향 대상 분류
 5. 추천/저장
 6. 오늘의 부동산 이슈 10개
+7. 커뮤니티 질문/지역 소식/내 상황 상담 글쓰기
 
 ## Positioning
 
@@ -67,6 +68,7 @@
 - Bank of Korea ECOS API: 기준금리 관측값을 `data_observations`에 저장하고 관련 링크 근거로 연결한다.
 - Supabase `summaries`: live ingest가 각 링크의 3줄 요약, 영향 대상, 체크포인트를 저장한다.
 - Supabase `data_observations` / `link_observations`: 뉴스 맥락, 실거래 표본, ECOS 관측값을 링크별 근거로 연결한다.
+- Supabase `community_posts`: 로그인 사용자가 질문, 지역 소식, 뉴스 제보, 내 상황 상담 글을 올리면 `pending`으로 저장한다.
 
 현재 DB 확인값:
 
@@ -80,6 +82,7 @@
 아직 화면에 안정적으로 반영되지 않는 것:
 
 - RSS: route는 있지만 `rss_sources`가 0개라 현재 공개 화면의 실제 원천은 아니다.
+- Community posts: 테이블과 작성 흐름은 연결됐지만, 현재 공개된 커뮤니티 글은 없다. 초기 운영은 승인 후 공개 방식이다.
 - REB/R-ONE: env와 문서 기준은 준비됐지만 실제 통계 endpoint/stat id 매핑이 아직 없어 지역 통계로 반영되지 않는다.
 - Law Open API: `LAW_OPEN_API_OC`는 들어왔지만 현재 호출은 `필수입력요소 검증에 실패하였습니다` 응답을 반환해 정상 근거로 저장하지 않고 warning으로만 남긴다.
 - OpenAI live summaries: `OPENAI_API_KEY`는 준비되어 있고 admin summary route도 있지만, `npm run data:live`는 `LIVE_USE_OPENAI=1`일 때만 OpenAI structured summary를 사용한다. 기본값은 fallback editorial template이다.

@@ -294,6 +294,63 @@ export type Database = {
         };
         Relationships: [];
       };
+      community_posts: {
+        Row: {
+          id: string;
+          title: string;
+          body: string;
+          post_type: "question" | "local_signal" | "link_tip" | "my_situation";
+          region: string;
+          category: string | null;
+          source_url: string | null;
+          related_link_id: string | null;
+          status: "pending" | "published" | "rejected";
+          created_by: string | null;
+          author_email: string;
+          vote_count: number;
+          comment_count: number;
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          body: string;
+          post_type: "question" | "local_signal" | "link_tip" | "my_situation";
+          region?: string;
+          category?: string | null;
+          source_url?: string | null;
+          related_link_id?: string | null;
+          status?: "pending" | "published" | "rejected";
+          created_by?: string | null;
+          author_email?: string;
+          vote_count?: number;
+          comment_count?: number;
+          published_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          body?: string;
+          post_type?: "question" | "local_signal" | "link_tip" | "my_situation";
+          region?: string;
+          category?: string | null;
+          source_url?: string | null;
+          related_link_id?: string | null;
+          status?: "pending" | "published" | "rejected";
+          created_by?: string | null;
+          author_email?: string;
+          vote_count?: number;
+          comment_count?: number;
+          published_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
       profiles: {
         Row: {
           id: string;

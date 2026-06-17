@@ -6,6 +6,7 @@ import { SignOutButton } from "@/components/sign-out-button";
 const navItems = [
   { href: "/", label: "홈" },
   { href: "/briefing", label: "브리프" },
+  { href: "/community", label: "커뮤니티" },
   { href: "/submit", label: "제보" },
 ];
 
@@ -42,6 +43,12 @@ export async function SiteHeader() {
             className="inline-flex h-9 items-center rounded-full px-2.5 text-xs font-medium text-white/82 hover:bg-white/10 md:hidden"
           >
             브리프
+          </Link>
+          <Link
+            href="/community"
+            className="inline-flex h-9 items-center rounded-full px-2.5 text-xs font-medium text-white/82 hover:bg-white/10 md:hidden"
+          >
+            커뮤니티
           </Link>
           <Link
             href="/submit"
